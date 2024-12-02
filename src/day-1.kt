@@ -1,4 +1,5 @@
 import java.io.File
+import kotlin.math.abs
 
 fun main() {
     val input: IdPairListString = File("./data/day-1.txt").readText().trim()
@@ -13,10 +14,7 @@ typealias IdPair = Pair<Int, Int>
 typealias IdPairList = List<IdPair>
 typealias IdPairListString = String
 
-fun IdPair.distanceApart() = when {
-    this.first > this.second -> this.first - this.second
-    else -> this.second - this.first
-}
+fun IdPair.distanceApart() = abs(this.first - this.second)
 
 fun createIdPairList(a: List<Int>, b: List<Int>): IdPairList = a.sorted().zip(b.sorted())
 
