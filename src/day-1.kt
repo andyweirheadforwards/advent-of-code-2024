@@ -18,9 +18,15 @@ fun IdPair.distanceApart() = abs(this.first - this.second)
 
 fun createIdPairList(a: List<Int>, b: List<Int>): IdPairList = a.sorted().zip(b.sorted())
 
-fun IdPairList.totalDistance() = this.sumOf { it.distanceApart() }
+fun IdPairList.totalDistance() = this.sumOf {
+    it.distanceApart()
+}
 
-fun IdPairList.similarityScore() = this.sumOf { it.first * this.count { pair -> pair.second == it.first } }
+fun IdPairList.similarityScore() = this.sumOf {
+    it.first * this.count { pair ->
+        pair.second == it.first
+    }
+}
 
 fun IdPairListString.toIdPairList(): IdPairList {
     val a = mutableListOf<Int>()
@@ -34,3 +40,14 @@ fun IdPairListString.toIdPairList(): IdPairList {
 
     return createIdPairList(a, b)
 }
+
+
+
+
+
+
+
+
+
+
+

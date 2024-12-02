@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Day1Test" tests="10" skipped="0" failures="0" errors="0" timestamp="2024-12-02T13:49:20" hostname="andyweir-2.broadband" time="0.029">
+  <properties/>
+  <testcase name="pair (1, 3) should have distance apart 2" classname="Day1Test" time="0.015"/>
+  <testcase name="pair (2, 3) should have distance apart 1" classname="Day1Test" time="0.001"/>
+  <testcase name="pair (3, 3) should have distance apart 0" classname="Day1Test" time="0.001"/>
+  <testcase name="pair (3, 4) should have distance apart 1" classname="Day1Test" time="0.001"/>
+  <testcase name="pair (3, 5) should have distance apart 2" classname="Day1Test" time="0.0"/>
+  <testcase name="pair (4, 9) should have distance apart 5" classname="Day1Test" time="0.001"/>
+  <testcase name="It should calculate total distance between two lists()" classname="Day1Test" time="0.0"/>
+  <testcase name="It should crate an IdPairList()" classname="Day1Test" time="0.002"/>
+  <testcase name="It should create IdPairList from string()" classname="Day1Test" time="0.004"/>
+  <testcase name="It should calculate similarity score()" classname="Day1Test" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
