@@ -4,7 +4,7 @@ private const val DISABLED = "don't()"
 private const val ENABLED = "do()"
 
 fun main() {
-    val input = File("./data/day-3.txt").readText().trim()
+    val input: MemoryListString = fetchDataForDay(3)
 
     val memory = input.memory
     println("Sum of the results of the multiplications:         ${memory.toMulList().calculate()}")

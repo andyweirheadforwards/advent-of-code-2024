@@ -1,7 +1,7 @@
 import java.io.File
 
 fun main() {
-    val input = File("./data/day-2.txt").readText().trim()
+    val input: ReportListString = fetchDataForDay(2)
 
     val reports = input.toReportList()
 

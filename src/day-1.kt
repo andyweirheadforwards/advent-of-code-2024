@@ -1,8 +1,7 @@
-import java.io.File
 import kotlin.math.abs
 
 fun main() {
-    val input: IdPairListString = File("./data/day-1.txt").readText().trim()
+    val input: IdPairListString = fetchDataForDay(1)
 
     val idPairList = input.toIdPairList()
 
