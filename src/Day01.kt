@@ -1,7 +1,7 @@
 import kotlin.math.abs
 
 fun main() {
-    val input: IdPairListString = fetchDataForDay(1)
+    val input: IdPairListString = readInput("Day01")
 
     val idPairList = input.toIdPairList()
 

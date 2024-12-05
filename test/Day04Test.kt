@@ -4,7 +4,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 
-class Day4Test {
+class Day04Test {
 
     @ParameterizedTest(name = "It should find {2} instances of WORD facing {1}")
     @MethodSource("getSmallGrid")

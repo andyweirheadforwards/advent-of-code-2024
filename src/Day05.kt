@@ -1,7 +1,7 @@
 import java.util.Collections
 
 fun main() {
-    val input = fetchDataForDay(5)
+    val input = readInput("Day05")
 
     val rules: RuleList = input.trim().lines()
         .takeWhile { it.isNotBlank() }

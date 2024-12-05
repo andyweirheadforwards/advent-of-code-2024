@@ -1,7 +1,7 @@
 import java.io.File
 
 fun main() {
-    val input: ReportListString = fetchDataForDay(2)
+    val input: ReportListString = readInput("Day02")
 
     val reports = input.toReportList()
 

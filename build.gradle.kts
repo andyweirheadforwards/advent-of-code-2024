@@ -1,5 +1,9 @@
 plugins {
-    kotlin("jvm") version "2.0.21"
+    kotlin("jvm") version "2.1.0"
+}
+
+kotlin {
+    jvmToolchain(21)
 }
 
 repositories {
@@ -7,25 +11,31 @@ repositories {
 }
 
 dependencies {
-    testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
+    testImplementation(kotlin("test"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
 }
 
-tasks.test {
-    useJUnitPlatform()
-}
-kotlin {
-    jvmToolchain(21)
-}
 sourceSets {
     main {
-        kotlin {
-            srcDirs("src")
-        }
+        kotlin.srcDir("src")
     }
 
     test {
         kotlin {
             srcDirs("test")
+        }
+    }
+}
+
+tasks {
+    wrapper {
+        gradleVersion = "8.11.1"
+    }
+
+    test {
+        useJUnitPlatform()
+        testLogging {
+            events("passed", "skipped", "failed")
         }
     }
 }

@@ -3,7 +3,7 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.params.*
 import org.junit.jupiter.params.provider.*
 
-class Day2Test {
+class Day02Test {
     var example: ReportListString = """
         7 6 4 2 1
         1 2 7 8 9
