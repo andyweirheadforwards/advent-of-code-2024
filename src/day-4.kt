@@ -4,7 +4,7 @@ const val X_MAS = "M S\n A \nM S"
 fun main() {
     val input: Grid = fetchDataForDay(4)
 
-    println("How many times does WORD appear?     ${input.searchForWord(WORD)}")
+    println("How many times does XMAS appear?     ${input.searchForWord(WORD)}")
     println("How many times does an X-MAS appear? ${input.searchForXMas()}")
 }
 

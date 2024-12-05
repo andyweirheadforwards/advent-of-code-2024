@@ -7,8 +7,8 @@ fun main() {
     val input: MemoryListString = fetchDataForDay(3)
 
     val memory = input.memory
-    println("Sum of the results of the multiplications:         ${memory.toMulList().calculate()}")
-    println("Sum of the results of the enabled multiplications: ${memory.enabledMemory.toMulList().calculate()}")
+    println("What do you get if you add up all of the results of the multiplications?              ${memory.toMulList().calculate()}")
+    println("What do you get if you add up all of the results of just the enabled multiplications? ${memory.enabledMemory.toMulList().calculate()}")
 }
 
 typealias MemoryListString = String

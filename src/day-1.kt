@@ -5,8 +5,8 @@ fun main() {
 
     val idPairList = input.toIdPairList()
 
-    println("Total distance between: ${idPairList.totalDistance()}")
-    println("Similarity score:       ${idPairList.similarityScore()}")
+    println("What is the total distance between your lists? ${idPairList.totalDistance()}")
+    println("What is their similarity score?                ${idPairList.similarityScore()}")
 }
 
 typealias IdPair = Pair<Int, Int>

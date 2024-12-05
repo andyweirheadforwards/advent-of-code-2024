@@ -5,8 +5,8 @@ fun main() {
 
     val reports = input.toReportList()
 
-    println("Number of safe reports:               ${reports.totalSafeReports()}")
-    println("Number of safe reports with dampener: ${reports.totalSafeReportsWithDampener()}")
+    println("How many reports are safe?     ${reports.totalSafeReports()}")
+    println("How many reports are now safe? ${reports.totalSafeReportsWithDampener()}")
 }
 
 typealias ReportListString = String
