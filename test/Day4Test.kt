@@ -6,28 +6,28 @@ import org.junit.jupiter.params.provider.MethodSource
 
 class Day4Test {
 
-    @ParameterizedTest(name="It should find {2} instances of XMAS facing {1}")
+    @ParameterizedTest(name = "It should find {2} instances of WORD facing {1}")
     @MethodSource("getSmallGrid")
-    fun `It should find XMAS in small grid`(grid: Grid, direction: Direction, expected: Int) {
-        assertEquals(expected, grid.searchFor(WORD, direction))
+    fun `It should find WORD in small grid`(grid: Grid, direction: Direction, expected: Int) {
+        assertEquals(expected, grid.searchForWord(WORD, direction))
     }
 
     @Test
-    fun `It should find all instances of XMAS in small grid`() {
+    fun `It should find all instances of WORD in small grid`() {
         val grid = smallGrid
-        assertEquals(4, grid.searchFor(WORD))
+        assertEquals(4, grid.searchForWord(WORD))
     }
 
-    @ParameterizedTest(name="It should find {2} instances of XMAS facing {1}")
+    @ParameterizedTest(name = "It should find {2} instances of WORD facing {1}")
     @MethodSource("getLargeGrid")
-    fun `It should find XMAS in large grid`(grid: Grid, direction: Direction, expected: Int) {
-        assertEquals(expected, grid.searchFor(WORD, direction))
+    fun `It should find WORD in large grid`(grid: Grid, direction: Direction, expected: Int) {
+        assertEquals(expected, grid.searchForWord(WORD, direction))
     }
 
     @Test
-    fun `It should find all instances of XMAS in large grid`() {
+    fun `It should find all instances of WORD in large grid`() {
         val grid = largeGrid
-        assertEquals(18, grid.searchFor(WORD))
+        assertEquals(18, grid.searchForWord(WORD))
     }
 
     @Test
@@ -78,20 +78,20 @@ class Day4Test {
     @Test
     fun `It should rotate grid CCW`() {
         val grid = """
-            ABC
-            FED
+            FA
+            EB
+            DC
         """.trimIndent()
         val expected = """
-            CD
-            BE
-            AF
+            ABC
+            FED
         """.trimIndent()
 
         assertEquals(expected, grid.rotatedCCW())
     }
 
     @Test
-    fun`It should slope grid to the right`(){
+    fun `It should slope grid to the right`() {
         val grid = """
             ABC
             DEF
@@ -107,7 +107,7 @@ class Day4Test {
     }
 
     @Test
-    fun`It should slope grid to the left`(){
+    fun `It should slope grid to the left`() {
         val grid = """
             ABC
             DEF
@@ -120,6 +120,44 @@ class Day4Test {
 """.trimIndent()
 
         assertEquals(expected, grid.slopeLeft())
+    }
+
+    @ParameterizedTest(name = "{0} rotated {1} times should match X_MAS")
+    @MethodSource("getXMas")
+    fun `It should match X_MAS rotated`(grid: Grid, rotated: Int) {
+        assertTrue(grid.matchesXMas())
+    }
+
+    @Test
+    fun `It should not match invalid X_MAS`() {
+        val invalidGrid: Grid = """
+            M S
+             X 
+            M S
+        """.trimIndent()
+
+        assertFalse(invalidGrid.matchesXMas())
+    }
+
+    @Test
+    fun `It should find all instances of X_MAS in grid`() {
+        val grid: Grid = """
+            .M.S......
+            ..A..MSMS.
+            .M.S.MAA..
+            ..A.ASMSM.
+            .M.S.M....
+            ..........
+            S.S.S.S.S.
+            .A.A.A.A..
+            M.M.M.M.M.
+            ..........
+        """.trimIndent()
+        val expected = 9
+
+        val number = grid.searchForXMas()
+
+        assertEquals(expected, number)
     }
 
     companion object {
@@ -167,6 +205,12 @@ class Day4Test {
             Arguments.of(largeGrid, Direction.WEST, 2),
             Arguments.of(largeGrid, Direction.NORTHWEST, 4),
         ).asIterable()
-    }
 
+        @JvmStatic
+        fun getXMas() = (0..3).map { rotated ->
+            var xmas = X_MAS.replace(" ", "Z")
+            repeat(rotated) { xmas = xmas.rotatedCW() }
+            Arguments.of(xmas, rotated)
+        }.asIterable()
+    }
 }
