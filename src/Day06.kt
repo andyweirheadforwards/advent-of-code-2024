@@ -138,9 +138,7 @@ fun PatrolMap.countLoopObstructionPositions(): Int {
     var loopCount = 0
     val (_, history) = patrol()
     val startPosition = history.first()
-    val locations = history.toSet().filter {
-        it !== startPosition
-    }
+    val locations = history.toSet() - startPosition
 
     locations.forEach { location ->
         val map = copy()
