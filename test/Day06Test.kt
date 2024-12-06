@@ -33,28 +33,6 @@ class Day06Test {
         ......#X..
     """.trimIndent()
 
-    @Test
-    fun `It should find start position`() {
-        val map: PatrolMap = testInput.replace('G', GuardDirection.NORTH.symbol).map
-
-        val expected = Position(4, 6)
-
-        val row = map.indexOfFirst { it.contains(GuardDirection.regex) }
-        val col = map[row].indexOfFirst { it in GuardDirection.symbols }
-        assertEquals(expected, Position(col, row))
-    }
-
-    @ParameterizedTest(name = "It should find guard direction {0}")
-    @MethodSource("getDirections")
-    fun `It should find start direction`(direction: GuardDirection) {
-        val map: PatrolMap = testInput.replace('G', direction.symbol).map
-
-        val expected = direction
-
-        val symbol = GuardDirection.regex.find(map.string)?.value.orEmpty().first().toChar()
-        assertEquals(expected, GuardDirection.fromSymbol(symbol))
-    }
-
     @ParameterizedTest(name = "{0} should be {1} after turning right")
     @MethodSource("getDirections")
     fun `It should change direction by turning right`(direction: GuardDirection, expected: GuardDirection) {

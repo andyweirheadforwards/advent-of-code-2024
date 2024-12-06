@@ -1,5 +1,3 @@
-import kotlin.text.Regex.Companion.escape
-
 fun main() {
     val input: PatrolMap = readInput("Day06").map
 
@@ -11,8 +9,7 @@ fun main() {
 }
 
 typealias PatrolMapString = String
-typealias PatrolMap = List<String>
-typealias MutablePatrolMap = MutableList<String>
+typealias PatrolMap = MutableList<CharArray>
 
 typealias Row = Int
 typealias Col = Int
@@ -31,7 +28,6 @@ enum class GuardDirection(var symbol: Char) {
     companion object {
 
         val symbols = entries.map { it.symbol }
-        val regex = "[${escape(symbols.joinToString(""))}]".toRegex()
 
         fun fromSymbol(symbol: Char): GuardDirection = GuardDirection.entries.first { it.symbol == symbol }
     }
@@ -56,22 +52,21 @@ val GuardDirection.turnRight: GuardDirection
         else -> GuardDirection.entries[ordinal + 1]
     }
 
-val PatrolMapString.map: PatrolMap get() = trim().lines()
+val PatrolMapString.map: PatrolMap get() = trim().lines().map { it.toCharArray() }.toMutableList()
 val PatrolMapString.guardLocationCount: Int get() = count { it == GUARD_LOCATION }
 
-fun PatrolMap.toMutablePatrolMap(): MutablePatrolMap = toMutableList()
-fun MutablePatrolMap.toPatrolMap(): PatrolMap = toMutableList()
-
-val PatrolMap.string: PatrolMapString get() = joinToString("\n")
+val PatrolMap.string: PatrolMapString get() = joinToString("\n") { it.joinToString("") }
 val PatrolMap.guardLocationCount: Int get() = this.string.guardLocationCount
 
+fun PatrolMap.copy(): PatrolMap = map { it.copyOf() }.toMutableList()
+
 fun PatrolMap.getGuard(): Guard {
-    val row = this.indexOfFirst { it.contains(GuardDirection.regex) }
-    val col = this[row].indexOfFirst { it in GuardDirection.symbols }
-
-    val symbol = GuardDirection.regex.find(string)?.value.orEmpty().first().toChar()
-
-    return Guard(Position(col, row), GuardDirection.fromSymbol(symbol))
+    indices.forEach { row ->
+        this[row].forEachIndexed { col, symbol ->
+            if (symbol in GuardDirection.symbols) return Guard(Position(col, row), GuardDirection.fromSymbol(symbol))
+        }
+    }
+    throw IllegalStateException("Guard not found in the PatrolMap!")
 }
 
 fun PatrolMap.symbolAt(position: Position) = this[position.second][position.first]
@@ -86,51 +81,48 @@ fun PatrolMap.isExit(position: Position) = when {
 }
 
 fun PatrolMap.markPosition(position: Position, symbol: Char = GUARD_LOCATION): PatrolMap {
-    val map = this.toMutablePatrolMap()
-    var row = map[position.second].toMutableList()
+    this[position.second][position.first] = symbol
 
-    row[position.first] = symbol
-
-    map[position.second] = row.joinToString("")
-
-    return map.toPatrolMap()
+    return this
 }
 
-class StuckInLoopException(val map: PatrolMap) : Exception("Stuck in a loop!")
+class StuckInLoopException(val map: PatrolMap, val guard: Guard) :
+    Exception("Stuck in a loop at position ${guard.position} facing ${guard.direction}")
 
 fun PatrolMap.patrol(): Pair<PatrolMap, List<Position>> {
+    var route: PatrolMap = copy()
     var guard = getGuard()
-    var route: PatrolMap = this
-    var history: MutableList<Guard> = mutableListOf()
+
+    var path = mutableListOf<Position>()
+    var history: MutableSet<Guard> = mutableSetOf()
 
     while (!isExit(guard.position)) {
-        route = route.markPosition(guard.position)
-        history.add(guard)
+        if (!history.add(guard)) throw StuckInLoopException(route, guard)
 
-        val nextPosition = guard.nextPosition
+        route.markPosition(guard.position)
+        path.add(guard.position)
 
         guard = when {
-            isExit(nextPosition) -> return Pair(route, history.map { it.position })
-            isObstruction(nextPosition) -> guard.turnRight()
+            isExit(guard.nextPosition) -> return Pair(route, path)
+            isObstruction(guard.nextPosition) -> guard.turnRight()
             else -> guard.moveForwards()
         }
-
-        if (history.contains(guard)) throw StuckInLoopException(route)
     }
 
-    return Pair(route, history.map { it.position })
+    return Pair(route, path)
 }
 
 fun PatrolMap.countLoopObstructionPositions(): Int {
     var loopCount = 0
-    val history = patrol().second
+    val (_, history) = patrol()
     val startPosition = history.first()
-    val locations = history.distinct().filter { it != startPosition }
+    val locations = history.toSet().filter { it !== startPosition }
 
     locations.forEach { location ->
+        val map = copy()
+        val (col, row) = location
         try {
-            val (col, row) = location
-            markPosition(Position(col, row), NEW_OBSTRUCTION).patrol()
+            map.markPosition(Position(col, row), NEW_OBSTRUCTION).patrol()
         } catch (_: StuckInLoopException) {
             loopCount++
         }
