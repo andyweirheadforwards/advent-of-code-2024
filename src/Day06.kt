@@ -1,9 +1,9 @@
 import kotlinx.coroutines.*
 import kotlin.time.measureTime
 
-const val REPEAT = 10
+const val REPEAT = 1
 
-fun main(): Unit = runBlocking {
+fun main() {
     measureTime {
         repeat(REPEAT) {
             val input: PatrolMap = readInput("Day06").map
@@ -14,7 +14,7 @@ fun main(): Unit = runBlocking {
             val loopCount = input.countLoopObstructionPositions()
             println("How many different positions could you choose for this obstruction?              $loopCount")
         }
-    }.let{println("\nAverage time taken: ${it/REPEAT}")}
+    }.let { println("\nAverage time taken: ${it / REPEAT}") }
 }
 
 typealias PatrolMapString = String
