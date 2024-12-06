@@ -1,11 +1,15 @@
+import kotlin.time.measureTime
+
 fun main() {
-    val input: PatrolMap = readInput("Day06").map
+    measureTime {
+        val input: PatrolMap = readInput("Day06").map
 
-    val positionCount = input.patrol().first.guardLocationCount
-    println("How many distinct positions will the guard visit before leaving the mapped area? $positionCount")
+        val positionCount = input.patrol().first.guardLocationCount
+        println("How many distinct positions will the guard visit before leaving the mapped area? $positionCount")
 
-    val loopCount = input.countLoopObstructionPositions()
-    println("How many different positions could you choose for this obstruction?              $loopCount")
+        val loopCount = input.countLoopObstructionPositions()
+        println("How many different positions could you choose for this obstruction?              $loopCount")
+    }.let{println("\nTime taken: $it")}
 }
 
 typealias PatrolMapString = String
