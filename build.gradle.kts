@@ -11,8 +11,11 @@ repositories {
 }
 
 dependencies {
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
+
     testImplementation(kotlin("test"))
     testImplementation("org.junit.jupiter:junit-jupiter")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:null")
 }
 
 sourceSets {

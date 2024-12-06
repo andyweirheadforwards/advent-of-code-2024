@@ -1,11 +1,17 @@
-fun main() {
-    val input: PatrolMap = readInput("Day06").map
+import kotlinx.coroutines.*
+import kotlin.coroutines.*
+import kotlin.time.measureTime
 
-    val positionCount = input.patrol().first.guardLocationCount
-    println("How many distinct positions will the guard visit before leaving the mapped area? $positionCount")
+fun main(): Unit = runBlocking {
+    measureTime {
+        val input: PatrolMap = readInput("Day06").map
 
-    val loopCount = input.countLoopObstructionPositions()
-    println("How many different positions could you choose for this obstruction?              $loopCount")
+        val positionCount = input.patrol().first.guardLocationCount
+        println("How many distinct positions will the guard visit before leaving the mapped area? $positionCount")
+
+        val loopCount = input.countLoopObstructionPositions()
+        println("How many different positions could you choose for this obstruction?              $loopCount")
+    }.let{println("\nTime taken: $it")}
 }
 
 typealias PatrolMapString = String
@@ -26,7 +32,7 @@ enum class GuardDirection(var symbol: Char) {
     WEST('<');
 
 
-    companion object  {
+    companion object {
 
         val symbols = entries.map {
             it.symbol
@@ -40,7 +46,7 @@ enum class GuardDirection(var symbol: Char) {
 
 data class Guard(val position: Position, val direction: GuardDirection) {
     val nextPosition: Position
-        get() = when(direction) {
+        get() = when (direction) {
             GuardDirection.NORTH -> Position(position.first, position.second - 1)
             GuardDirection.SOUTH -> Position(position.first, position.second + 1)
             GuardDirection.WEST -> Position(position.first - 1, position.second)
@@ -109,7 +115,8 @@ fun PatrolMap.markPosition(position: Position, symbol: Char = GUARD_LOCATION): P
     return this
 }
 
-class StuckInLoopException(val map: PatrolMap, val guard: Guard) : Exception("Stuck in a loop at position ${guard.position} facing ${guard.direction}")
+class StuckInLoopException(val map: PatrolMap, val guard: Guard) :
+    Exception("Stuck in a loop at position ${guard.position} facing ${guard.direction}")
 
 fun PatrolMap.patrol(): Pair<PatrolMap, List<Position>> {
     var route: PatrolMap = copy()
@@ -134,21 +141,24 @@ fun PatrolMap.patrol(): Pair<PatrolMap, List<Position>> {
     return Pair(route, path)
 }
 
-fun PatrolMap.countLoopObstructionPositions(): Int {
-    var loopCount = 0
+fun PatrolMap.countLoopObstructionPositions(): Int = runBlocking {
     val (_, history) = patrol()
     val startPosition = history.first()
     val locations = history.toSet() - startPosition
 
-    locations.forEach { location ->
-        val map = copy()
-        val (col, row) = location
-        try {
-            map.markPosition(Position(col, row), NEW_OBSTRUCTION).patrol()
-        } catch (`_`: StuckInLoopException) {
-            loopCount++
+    val result = locations.map { location ->
+        async {
+            val map = copy()
+            val (col, row) = location
+            try {
+                map.markPosition(Position(col, row), NEW_OBSTRUCTION).patrol()
+                false
+            } catch (`_`: StuckInLoopException) {
+                true
+            }
         }
     }
-    return loopCount
+
+    result.awaitAll().filter { it == true }.size
 }
 
