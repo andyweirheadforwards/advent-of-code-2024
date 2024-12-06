@@ -25,22 +25,28 @@ enum class GuardDirection(var symbol: Char) {
     SOUTH('v'),
     WEST('<');
 
-    companion object {
 
-        val symbols = entries.map { it.symbol }
+    companion object  {
 
-        fun fromSymbol(symbol: Char): GuardDirection = GuardDirection.entries.first { it.symbol == symbol }
+        val symbols = entries.map {
+            it.symbol
+        }
+
+        fun fromSymbol(symbol: Char): GuardDirection = GuardDirection.entries.first {
+            it.symbol == symbol
+        }
     }
 }
 
 data class Guard(val position: Position, val direction: GuardDirection) {
     val nextPosition: Position
-        get() = when (direction) {
+        get() = when(direction) {
             GuardDirection.NORTH -> Position(position.first, position.second - 1)
             GuardDirection.SOUTH -> Position(position.first, position.second + 1)
             GuardDirection.WEST -> Position(position.first - 1, position.second)
             GuardDirection.EAST -> Position(position.first + 1, position.second)
         }
+
 
     fun turnRight(): Guard = copy(direction = direction.turnRight)
     fun moveForwards(): Guard = copy(position = nextPosition)
@@ -52,13 +58,30 @@ val GuardDirection.turnRight: GuardDirection
         else -> GuardDirection.entries[ordinal + 1]
     }
 
-val PatrolMapString.map: PatrolMap get() = trim().lines().map { it.toCharArray() }.toMutableList()
-val PatrolMapString.guardLocationCount: Int get() = count { it == GUARD_LOCATION }
 
-val PatrolMap.string: PatrolMapString get() = joinToString("\n") { it.joinToString("") }
-val PatrolMap.guardLocationCount: Int get() = this.string.guardLocationCount
+val PatrolMapString.map: PatrolMap
+    get() = trim().lines().map {
+        it.toCharArray()
+    }.toMutableList()
 
-fun PatrolMap.copy(): PatrolMap = map { it.copyOf() }.toMutableList()
+val PatrolMapString.guardLocationCount: Int
+    get() = count {
+        it == GUARD_LOCATION
+    }
+
+
+val PatrolMap.string: PatrolMapString
+    get() = joinToString("\n") {
+        it.joinToString("")
+    }
+
+val PatrolMap.guardLocationCount: Int
+    get() = this.string.guardLocationCount
+
+
+fun PatrolMap.copy(): PatrolMap = map {
+    it.copyOf()
+}.toMutableList()
 
 fun PatrolMap.getGuard(): Guard {
     indices.forEach { row ->
@@ -76,7 +99,7 @@ fun PatrolMap.isObstruction(position: Position) = symbolAt(position) in listOf(O
 fun PatrolMap.isExit(position: Position) = when {
     position.first < 0 || position.second < 0 -> true
     position.first > first().lastIndex -> true // col
-    position.second > lastIndex -> true        // row
+    position.second > lastIndex -> true // row
     else -> false
 }
 
@@ -86,8 +109,7 @@ fun PatrolMap.markPosition(position: Position, symbol: Char = GUARD_LOCATION): P
     return this
 }
 
-class StuckInLoopException(val map: PatrolMap, val guard: Guard) :
-    Exception("Stuck in a loop at position ${guard.position} facing ${guard.direction}")
+class StuckInLoopException(val map: PatrolMap, val guard: Guard) : Exception("Stuck in a loop at position ${guard.position} facing ${guard.direction}")
 
 fun PatrolMap.patrol(): Pair<PatrolMap, List<Position>> {
     var route: PatrolMap = copy()
@@ -116,16 +138,19 @@ fun PatrolMap.countLoopObstructionPositions(): Int {
     var loopCount = 0
     val (_, history) = patrol()
     val startPosition = history.first()
-    val locations = history.toSet().filter { it !== startPosition }
+    val locations = history.toSet().filter {
+        it !== startPosition
+    }
 
     locations.forEach { location ->
         val map = copy()
         val (col, row) = location
         try {
             map.markPosition(Position(col, row), NEW_OBSTRUCTION).patrol()
-        } catch (_: StuckInLoopException) {
+        } catch (`_`: StuckInLoopException) {
             loopCount++
         }
     }
     return loopCount
 }
+

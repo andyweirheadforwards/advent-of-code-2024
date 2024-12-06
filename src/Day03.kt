@@ -15,11 +15,13 @@ typealias MemoryListString = String
 typealias Memory = String
 typealias MulList = List<String>
 
-val MemoryListString.memory: Memory get() = lines().joinToString(" ~ ")
+val MemoryListString.memory: Memory
+    get() = lines().joinToString(" ~ ")
 
-fun MemoryListString.toMulList(): MulList = "mul\\(\\d{1,3},\\d{1,3}\\)".toRegex()
-    .findAll(this)
-    .map { it.value }.toList()
+
+fun MemoryListString.toMulList(): MulList = "mul\\(\\d{1,3},\\d{1,3}\\)".toRegex().findAll(this).map {
+    it.value
+}.toList()
 
 val Memory.enabledMemory: Memory
     get() {
@@ -39,13 +41,22 @@ val Memory.enabledMemory: Memory
 
                 add(segment)
 
-                remainingData = remainingData.takeIf { found }?.substring(index + marker.length) ?: ""
+                remainingData = remainingData.takeIf {
+                    found
+                }?.substring(index + marker.length) ?: ""
                 isEnabled = found && !isEnabled
             }
-        }.filter { it.isNotBlank() }.joinToString(" ~ ")
+        }.filter {
+            it.isNotBlank()
+        }.joinToString(" ~ ")
     }
 
-fun MulList.calculate(): Int = sumOf { it.extractIntegerPair().let { it.first * it.second } }
+
+fun MulList.calculate(): Int = sumOf {
+    it.extractIntegerPair().let {
+        it.first * it.second
+    }
+}
 
 fun String.extractIntegerPair(): Pair<Int, Int> {
     val groups = "(\\d{1,3}),(\\d{1,3})".toRegex().find(this)?.groups
@@ -54,3 +65,4 @@ fun String.extractIntegerPair(): Pair<Int, Int> {
 
     return first to second
 }
+
