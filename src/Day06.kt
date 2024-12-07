@@ -1,4 +1,7 @@
 import GuardDirection.entries
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.runBlocking
 import kotlin.time.measureTime
 
 fun main() {
@@ -139,20 +142,24 @@ fun PatrolMap.patrol(): Pair<PatrolMap, List<Position>> {
   return Pair(route, path)
 }
 
-fun PatrolMap.countLoopObstructionPositions(): Int {
-  var loopCount = 0
+fun PatrolMap.countLoopObstructionPositions(): Int = runBlocking {
   val (_, history) = patrol()
   val startPosition = history.first()
   val locations = history.toSet() - startPosition
 
-  locations.forEach { location ->
-    val map = copy()
-    val (col, row) = location
-    try {
-      map.markPosition(Position(col, row), NEW_OBSTRUCTION).patrol()
-    } catch (`_`: StuckInLoopException) {
-      loopCount++
-    }
-  }
-  return loopCount
+  val result =
+      locations.map { location ->
+        async {
+          val map = copy()
+          val (col, row) = location
+          try {
+            map.markPosition(Position(col, row), NEW_OBSTRUCTION).patrol()
+            false
+          } catch (`_`: StuckInLoopException) {
+            true
+          }
+        }
+      }
+
+  result.awaitAll().filter { it == true }.size
 }
