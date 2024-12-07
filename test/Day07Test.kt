@@ -1,4 +1,4 @@
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
@@ -6,50 +6,55 @@ import org.junit.jupiter.params.provider.MethodSource
 
 class Day07Test {
 
-    @ParameterizedTest(name = "it should create calibration {0}")
-    @MethodSource("getCalibrationList")
-    fun `It should create Calibration from string`(expected: Calibration) {
-        val string = "${expected.target}: ${expected.values.joinToString(" ")}"
+  @ParameterizedTest(name = "it should create calibration {0}")
+  @MethodSource("getCalibrationList")
+  fun `It should create Calibration from string`(expected: Calibration) {
+    val string = "${expected.target}: ${expected.values.joinToString(" ")}"
 
-        assertEquals(expected, string.toCalibration())
-    }
+    assertEquals(expected, string.toCalibration())
+  }
 
-    @Test
-    fun `It should create a CalibrationList from string`() {
-        val expected = calibrationList
-        val string = expected.joinToString("\n") { "${it.target}: ${it.values.joinToString(" ")}" }
+  @Test
+  fun `It should create a CalibrationList from string`() {
+    val expected = calibrationList
+    val string = expected.joinToString("\n") { "${it.target}: ${it.values.joinToString(" ")}" }
 
-        assertEquals(expected, string.toCalibrationList())
-    }
+    assertEquals(expected, string.toCalibrationList())
+  }
 
-    @ParameterizedTest(name = "it should convert {0}")
-    @MethodSource("getCalibrationList")
-    fun `It should convert Calibration to String`(calibration: Calibration, string: String) {
-        assertEquals(string, calibration.toString())
-    }
+  @ParameterizedTest(name = "it should convert {0}")
+  @MethodSource("getCalibrationList")
+  fun `It should convert Calibration to String`(calibration: Calibration, string: String) {
+    assertEquals(string, calibration.toString())
+  }
 
-    @ParameterizedTest(name = "{1} is valid {2}")
-    @MethodSource("getCalibrationList")
-    fun `It should be a valid calibration`(calibration: Calibration, string: String, isValid: Boolean) {
-        assertEquals(isValid, calibration.isValidOne)
-    }
+  @ParameterizedTest(name = "{1} is valid {2}")
+  @MethodSource("getCalibrationList")
+  fun `It should be a valid calibration`(
+      calibration: Calibration,
+      string: String,
+      isValid: Boolean
+  ) {
+    assertEquals(isValid, calibration.isValidOne)
+  }
 
-    @Test
-    fun `It should calculate the sum of calibrations plus, times`() {
-        val expected = 3749L
+  @Test
+  fun `It should calculate the sum of calibrations plus, times`() {
+    val expected = 3749L
 
-        assertEquals(expected, calibrationList.filter { it.isValidOne }.calibrationTotal)
-    }
+    assertEquals(expected, calibrationList.filter { it.isValidOne }.calibrationTotal)
+  }
 
-    @Test
-    fun `It should calculate the sum of calibrations plus, times, concat`() {
-        val expected = 11387L
+  @Test
+  fun `It should calculate the sum of calibrations plus, times, concat`() {
+    val expected = 11387L
 
-        assertEquals(expected, calibrationList.filter { it.isValidTwo }.calibrationTotal)
-    }
+    assertEquals(expected, calibrationList.filter { it.isValidTwo }.calibrationTotal)
+  }
 
-    companion object {
-        val calibrationListString = """
+  companion object {
+    val calibrationListString =
+        """
             190: 10 19
             3267: 81 40 27
             83: 17 5
@@ -59,9 +64,11 @@ class Day07Test {
             192: 17 8 14
             21037: 9 7 18 13
             292: 11 6 16 20
-        """.trimIndent()
+        """
+            .trimIndent()
 
-        val calibrationList = listOf<Calibration>(
+    val calibrationList =
+        listOf<Calibration>(
             Calibration(190, listOf(10, 19)),
             Calibration(3267, listOf(81, 40, 27)),
             Calibration(83, listOf(17, 5)),
@@ -73,15 +80,23 @@ class Day07Test {
             Calibration(292, listOf(11, 6, 16, 20)),
         )
 
-        val validCalibrations = listOf<Calibration>(
+    val validCalibrations =
+        listOf<Calibration>(
             Calibration(190, listOf(10, 19)),
             Calibration(3267, listOf(81, 40, 27)),
             Calibration(292, listOf(11, 6, 16, 20)),
         )
 
-        @JvmStatic
-        fun getCalibrationList() = calibrationListString.lines().mapIndexed { index, string ->
-            Arguments.of(calibrationList[index], string, validCalibrations.contains(calibrationList[index]))
-        }.asIterable()
-    }
+    @JvmStatic
+    fun getCalibrationList() =
+        calibrationListString
+            .lines()
+            .mapIndexed { index, string ->
+              Arguments.of(
+                  calibrationList[index],
+                  string,
+                  validCalibrations.contains(calibrationList[index]))
+            }
+            .asIterable()
+  }
 }
