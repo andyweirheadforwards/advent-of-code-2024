@@ -1,10 +1,8 @@
 import kotlin.time.measureTime
 
-const val REPEAT = 1
-
 fun main() {
     measureTime {
-        repeat(REPEAT) {
+        repeat(PROFILE_REPEAT) {
             val input: PatrolMap = readInput("Day06").map
 
             val positionCount = input.patrol().first.guardLocationCount
@@ -13,7 +11,7 @@ fun main() {
             val loopCount = input.countLoopObstructionPositions()
             println("How many different positions could you choose for this obstruction?              $loopCount")
         }
-    }.let { println("\nAverage time taken: ${it / REPEAT}") }
+    }.let { println("\nAverage time taken: ${it / PROFILE_REPEAT}") }
 }
 
 typealias PatrolMapString = String
