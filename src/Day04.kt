@@ -2,7 +2,7 @@ const val WORD = "XMAS"
 const val X_MAS = "M S\n A \nM S"
 
 fun main() {
-  val input: Grid = readInput("Day04")
+  val input: GridString = readInput("Day04")
 
   println("How many times does XMAS appear?     ${input.searchForWord(WORD)}")
   println("How many times does an X-MAS appear? ${input.searchForXMas()}")
@@ -19,9 +19,7 @@ enum class Direction {
   NORTHWEST
 }
 
-typealias Grid = String
-
-fun Grid.searchForWord(word: String, direction: Direction? = null): Int {
+fun GridString.searchForWord(word: String, direction: Direction? = null): Int {
 
   if (direction == null) return Direction.entries.sumOf { searchForWord(word, it) }
 
@@ -39,7 +37,7 @@ fun Grid.searchForWord(word: String, direction: Direction? = null): Int {
       .count()
 }
 
-fun Grid.searchForXMas(): Int {
+fun GridString.searchForXMas(): Int {
   val grid: List<String> = lines()
   var count = 0
 
@@ -49,23 +47,23 @@ fun Grid.searchForXMas(): Int {
       if (colIndex < 1 || colIndex > row.lastIndex - 1) return@forEachIndexed
       if (col != 'A') return@forEachIndexed
 
-      val searchGrid =
+      val searchGridString =
           grid.subList(rowIndex - 1, rowIndex + 2).joinToString("\n") { row ->
             row.substring(colIndex - 1, colIndex + 2)
           }
 
-      if (searchGrid.matchesXMas()) count++
+      if (searchGridString.matchesXMas()) count++
     }
   }
 
   return count
 }
 
-fun Grid.reverseHorizontal() = lines().joinToString("\n") { it.reversed() }
+fun GridString.reverseHorizontal() = lines().joinToString("\n") { it.reversed() }
 
-fun Grid.reverseVertical(): Grid = lines().reversed().joinToString("\n")
+fun GridString.reverseVertical(): GridString = lines().reversed().joinToString("\n")
 
-fun Grid.rotatedCW(): Grid {
+fun GridString.rotatedCW(): GridString {
   val rotated = mutableListOf<MutableList<Char>>()
   val lines = trim().lines().map { it.trim() }
 
@@ -76,9 +74,9 @@ fun Grid.rotatedCW(): Grid {
   return rotated.joinToString("\n") { it.joinToString("") }
 }
 
-fun Grid.rotatedCCW(): Grid = rotatedCW().reverseHorizontal().reverseVertical()
+fun GridString.rotatedCCW(): GridString = rotatedCW().reverseHorizontal().reverseVertical()
 
-fun Grid.slopeRight(): Grid =
+fun GridString.slopeRight(): GridString =
     trim()
         .lines()
         .mapIndexed { index, line ->
@@ -86,11 +84,11 @@ fun Grid.slopeRight(): Grid =
         }
         .joinToString("\n")
 
-fun Grid.slopeLeft(): Grid = reverseHorizontal().slopeRight().reverseHorizontal()
+fun GridString.slopeLeft(): GridString = reverseHorizontal().slopeRight().reverseHorizontal()
 
-fun Grid.matchesXMas(): Boolean {
+fun GridString.matchesXMas(): Boolean {
 
-  fun doesMatch(grid: Grid): Boolean {
+  fun doesMatch(grid: GridString): Boolean {
     if (!"M.S".toRegex().matches(grid.lines()[0])) return false
     if (!".A.".toRegex().matches(grid.lines()[1])) return false
     if (!"M.S".toRegex().matches(grid.lines()[2])) return false

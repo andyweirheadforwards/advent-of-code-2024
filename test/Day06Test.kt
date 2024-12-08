@@ -3,6 +3,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
+import java.awt.Point
 import kotlin.test.assertFailsWith
 
 class Day06Test {
@@ -58,8 +59,8 @@ class Day06Test {
             .trimIndent()
             .map
 
-    assertEquals('.', map.symbolAt(Position(0, 0)))
-    assertEquals('X', map.symbolAt(Position(1, 1)))
+    assertEquals('.', map.getSymbolAt(Point(0, 0)))
+    assertEquals('X', map.getSymbolAt(Point(1, 1)))
   }
 
   @Test
@@ -73,8 +74,8 @@ class Day06Test {
             .trimIndent()
             .map
 
-    assertFalse(map.isObstruction(Position(0, 0)))
-    assertTrue(map.isObstruction(Position(1, 1)))
+    assertFalse(map.isObstruction(Point(0, 0)))
+    assertTrue(map.isObstruction(Point(1, 1)))
   }
 
   @Test
@@ -88,20 +89,20 @@ class Day06Test {
             .trimIndent()
             .map
 
-    assertTrue(map.isExit(Position(-1, -1)))
-    assertFalse(map.isExit(Position(1, 1)))
-    assertTrue(map.isExit(Position(3, 3)))
+    assertTrue(map.isExit(Point(-1, -1)))
+    assertFalse(map.isExit(Point(1, 1)))
+    assertTrue(map.isExit(Point(3, 3)))
   }
 
   @ParameterizedTest(name = "{0} should be {1} after turning right")
-  @MethodSource("getNextPositions")
+  @MethodSource("getNextLocations")
   fun `It should get the next guard position based on direction`(
       direction: GuardDirection,
-      expected: Position
+      expected: Point
   ) {
-    val guard = Guard(Position(1, 1), direction)
+    val guard = Guard(Point(1, 1), direction)
 
-    assertEquals(expected, guard.nextPosition)
+    assertEquals(expected, guard.nextPoint)
   }
 
   @Test
@@ -123,9 +124,9 @@ class Day06Test {
         """
             .trimIndent()
 
-    val guardPosition = Position(1, 1)
+    val guardLocation = Point(1, 1)
 
-    assertEquals(expected, map.markPosition(guardPosition).string)
+    assertEquals(expected, map.setSymbolAt(guardLocation).string)
   }
 
   @Test
@@ -212,7 +213,7 @@ class Day06Test {
 
     val expected = 6
 
-    assertEquals(expected, map.countLoopObstructionPositions())
+    assertEquals(expected, map.countLoopObstructionLocations())
   }
 
   companion object {
@@ -228,13 +229,13 @@ class Day06Test {
             .asIterable()
 
     @JvmStatic
-    fun getNextPositions() =
+    fun getNextLocations() =
         listOf(
                 // current direction, next position (starting from 1,1)
-                Arguments.of(GuardDirection.NORTH, Position(1, 0)),
-                Arguments.of(GuardDirection.EAST, Position(2, 1)),
-                Arguments.of(GuardDirection.SOUTH, Position(1, 2)),
-                Arguments.of(GuardDirection.WEST, Position(0, 1)),
+                Arguments.of(GuardDirection.NORTH, Point(1, 0)),
+                Arguments.of(GuardDirection.EAST, Point(2, 1)),
+                Arguments.of(GuardDirection.SOUTH, Point(1, 2)),
+                Arguments.of(GuardDirection.WEST, Point(0, 1)),
             )
             .asIterable()
   }

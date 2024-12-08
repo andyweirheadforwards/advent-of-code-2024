@@ -2,6 +2,7 @@ import GuardDirection.entries
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
+import java.awt.Point
 import kotlin.time.measureTime
 
 fun main() {
@@ -9,27 +10,21 @@ fun main() {
         repeat(PROFILE_REPEAT) {
           val input: PatrolMap = readInput("Day06").map
 
-          val positionCount = input.patrol().first.guardLocationCount
+          val locationCount = input.patrol().first.guardLocationCount
           println(
-              "How many distinct positions will the guard visit before leaving the mapped area? $positionCount")
+              "How many distinct locations will the guard visit before leaving the mapped area? $locationCount")
 
-          val loopCount = input.countLoopObstructionPositions()
+          val loopCount = input.countLoopObstructionLocations()
           println(
-              "How many different positions could you choose for this obstruction?              $loopCount")
+              "How many different locations could you choose for this obstruction?              $loopCount")
         }
       }
       .let { println("\nAverage time taken: ${it / PROFILE_REPEAT}") }
 }
 
-typealias PatrolMapString = String
+typealias PatrolMapString = GridString
 
-typealias PatrolMap = MutableList<CharArray>
-
-typealias Row = Int
-
-typealias Col = Int
-
-typealias Position = Pair<Col, Row> // 0,0 is top left
+typealias PatrolMap = Grid
 
 const val GUARD_LOCATION = 'X'
 const val OBSTRUCTION = '#'
@@ -50,19 +45,19 @@ enum class GuardDirection(var symbol: Char) {
   }
 }
 
-data class Guard(val position: Position, val direction: GuardDirection) {
-  val nextPosition: Position
+data class Guard(val point: Point, val direction: GuardDirection) {
+  val nextPoint: Point
     get() =
         when (direction) {
-          GuardDirection.NORTH -> Position(position.first, position.second - 1)
-          GuardDirection.SOUTH -> Position(position.first, position.second + 1)
-          GuardDirection.WEST -> Position(position.first - 1, position.second)
-          GuardDirection.EAST -> Position(position.first + 1, position.second)
+          GuardDirection.NORTH -> Point(point.x, point.y - 1)
+          GuardDirection.SOUTH -> Point(point.x, point.y + 1)
+          GuardDirection.WEST -> Point(point.x - 1, point.y)
+          GuardDirection.EAST -> Point(point.x + 1, point.y)
         }
 
   fun turnRight(): Guard = copy(direction = direction.turnRight)
 
-  fun moveForwards(): Guard = copy(position = nextPosition)
+  fun moveForwards(): Guard = copy(point = nextPoint)
 }
 
 val GuardDirection.turnRight: GuardDirection
@@ -78,9 +73,6 @@ val PatrolMapString.map: PatrolMap
 val PatrolMapString.guardLocationCount: Int
   get() = count { it == GUARD_LOCATION }
 
-val PatrolMap.string: PatrolMapString
-  get() = joinToString("\n") { it.joinToString("") }
-
 val PatrolMap.guardLocationCount: Int
   get() = this.string.guardLocationCount
 
@@ -90,51 +82,43 @@ fun PatrolMap.getGuard(): Guard {
   indices.forEach { row ->
     this[row].forEachIndexed { col, symbol ->
       if (symbol in GuardDirection.symbols)
-          return Guard(Position(col, row), GuardDirection.fromSymbol(symbol))
+          return Guard(Point(col, row), GuardDirection.fromSymbol(symbol))
     }
   }
   throw IllegalStateException("Guard not found in the PatrolMap!")
 }
 
-fun PatrolMap.symbolAt(position: Position) = this[position.second][position.first]
+fun PatrolMap.isObstruction(point: Point) =
+    getSymbolAt(point) in listOf(OBSTRUCTION, NEW_OBSTRUCTION)
 
-fun PatrolMap.isObstruction(position: Position) =
-    symbolAt(position) in listOf(OBSTRUCTION, NEW_OBSTRUCTION)
-
-fun PatrolMap.isExit(position: Position) =
+fun PatrolMap.isExit(point: Point) =
     when {
-      position.first < 0 || position.second < 0 -> true
-      position.first > first().lastIndex -> true // col
-      position.second > lastIndex -> true // row
+      point.x < 0 || point.y < 0 -> true
+      point.x > first().lastIndex -> true // col
+      point.y > lastIndex -> true // row
       else -> false
     }
 
-fun PatrolMap.markPosition(position: Position, symbol: Char = GUARD_LOCATION): PatrolMap {
-  this[position.second][position.first] = symbol
-
-  return this
-}
-
 class StuckInLoopException(val map: PatrolMap, val guard: Guard) :
-    Exception("Stuck in a loop at position ${guard.position} facing ${guard.direction}")
+    Exception("Stuck in a loop at location ${guard.point} facing ${guard.direction}")
 
-fun PatrolMap.patrol(): Pair<PatrolMap, List<Position>> {
+fun PatrolMap.patrol(): Pair<PatrolMap, List<Point>> {
   var route: PatrolMap = copy()
   var guard = getGuard()
 
-  var path = mutableListOf<Position>()
+  var path = mutableListOf<Point>()
   var history: MutableSet<Guard> = mutableSetOf()
 
-  while (!isExit(guard.position)) {
+  while (!isExit(guard.point)) {
     if (!history.add(guard)) throw StuckInLoopException(route, guard)
 
-    route.markPosition(guard.position)
-    path.add(guard.position)
+    route.setSymbolAt(guard.point)
+    path.add(guard.point)
 
     guard =
         when {
-          isExit(guard.nextPosition) -> return Pair(route, path)
-          isObstruction(guard.nextPosition) -> guard.turnRight()
+          isExit(guard.nextPoint) -> return Pair(route, path)
+          isObstruction(guard.nextPoint) -> guard.turnRight()
           else -> guard.moveForwards()
         }
   }
@@ -142,18 +126,17 @@ fun PatrolMap.patrol(): Pair<PatrolMap, List<Position>> {
   return Pair(route, path)
 }
 
-fun PatrolMap.countLoopObstructionPositions(): Int = runBlocking {
+fun PatrolMap.countLoopObstructionLocations(): Int = runBlocking {
   val (_, history) = patrol()
-  val startPosition = history.first()
-  val locations = history.toSet() - startPosition
+  val startPoint = history.first()
+  val locations = history.toSet() - startPoint
 
   val result =
       locations.map { location ->
         async {
           val map = copy()
-          val (col, row) = location
           try {
-            map.markPosition(Position(col, row), NEW_OBSTRUCTION).patrol()
+            map.setSymbolAt(Point(location.x, location.y), NEW_OBSTRUCTION).patrol()
             false
           } catch (`_`: StuckInLoopException) {
             true

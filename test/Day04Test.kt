@@ -7,26 +7,26 @@ import org.junit.jupiter.params.provider.MethodSource
 class Day04Test {
 
   @ParameterizedTest(name = "It should find {2} instances of WORD facing {1}")
-  @MethodSource("getSmallGrid")
-  fun `It should find WORD in small grid`(grid: Grid, direction: Direction, expected: Int) {
+  @MethodSource("getSmallGridString")
+  fun `It should find WORD in small grid`(grid: GridString, direction: Direction, expected: Int) {
     assertEquals(expected, grid.searchForWord(WORD, direction))
   }
 
   @Test
   fun `It should find all instances of WORD in small grid`() {
-    val grid = smallGrid
+    val grid = smallGridString
     assertEquals(4, grid.searchForWord(WORD))
   }
 
   @ParameterizedTest(name = "It should find {2} instances of WORD facing {1}")
-  @MethodSource("getLargeGrid")
-  fun `It should find WORD in large grid`(grid: Grid, direction: Direction, expected: Int) {
+  @MethodSource("getLargeGridString")
+  fun `It should find WORD in large grid`(grid: GridString, direction: Direction, expected: Int) {
     assertEquals(expected, grid.searchForWord(WORD, direction))
   }
 
   @Test
   fun `It should find all instances of WORD in large grid`() {
-    val grid = largeGrid
+    val grid = largeGridString
     assertEquals(18, grid.searchForWord(WORD))
   }
 
@@ -148,13 +148,13 @@ class Day04Test {
 
   @ParameterizedTest(name = "{0} rotated {1} times should match X_MAS")
   @MethodSource("getXMas")
-  fun `It should match X_MAS rotated`(grid: Grid, rotated: Int) {
+  fun `It should match X_MAS rotated`(grid: GridString, rotated: Int) {
     assertTrue(grid.matchesXMas())
   }
 
   @Test
   fun `It should not match invalid X_MAS`() {
-    val invalidGrid: Grid =
+    val invalidGridString: GridString =
         """
             M S
              X 
@@ -162,12 +162,12 @@ class Day04Test {
         """
             .trimIndent()
 
-    assertFalse(invalidGrid.matchesXMas())
+    assertFalse(invalidGridString.matchesXMas())
   }
 
   @Test
   fun `It should find all instances of X_MAS in grid`() {
-    val grid: Grid =
+    val grid: GridString =
         """
             .M.S......
             ..A..MSMS.
@@ -189,7 +189,7 @@ class Day04Test {
   }
 
   companion object {
-    private val smallGrid =
+    private val smallGridString =
         """
             ..X...
             .SAMX.
@@ -200,20 +200,20 @@ class Day04Test {
             .trimIndent()
 
     @JvmStatic
-    fun getSmallGrid() =
+    fun getSmallGridString() =
         listOf(
-                Arguments.of(smallGrid, Direction.NORTH, 1),
-                Arguments.of(smallGrid, Direction.NORTHEAST, 0),
-                Arguments.of(smallGrid, Direction.EAST, 1),
-                Arguments.of(smallGrid, Direction.SOUTHEAST, 1),
-                Arguments.of(smallGrid, Direction.SOUTH, 0),
-                Arguments.of(smallGrid, Direction.SOUTHWEST, 0),
-                Arguments.of(smallGrid, Direction.WEST, 1),
-                Arguments.of(smallGrid, Direction.NORTHWEST, 0),
+                Arguments.of(smallGridString, Direction.NORTH, 1),
+                Arguments.of(smallGridString, Direction.NORTHEAST, 0),
+                Arguments.of(smallGridString, Direction.EAST, 1),
+                Arguments.of(smallGridString, Direction.SOUTHEAST, 1),
+                Arguments.of(smallGridString, Direction.SOUTH, 0),
+                Arguments.of(smallGridString, Direction.SOUTHWEST, 0),
+                Arguments.of(smallGridString, Direction.WEST, 1),
+                Arguments.of(smallGridString, Direction.NORTHWEST, 0),
             )
             .asIterable()
 
-    private val largeGrid =
+    private val largeGridString =
         """
             MMMSXXMASM
             MSAMXMSMSA
@@ -229,16 +229,16 @@ class Day04Test {
             .trimIndent()
 
     @JvmStatic
-    fun getLargeGrid() =
+    fun getLargeGridString() =
         listOf(
-                Arguments.of(largeGrid, Direction.NORTH, 2),
-                Arguments.of(largeGrid, Direction.NORTHEAST, 4),
-                Arguments.of(largeGrid, Direction.EAST, 3),
-                Arguments.of(largeGrid, Direction.SOUTHEAST, 1),
-                Arguments.of(largeGrid, Direction.SOUTH, 1),
-                Arguments.of(largeGrid, Direction.SOUTHWEST, 1),
-                Arguments.of(largeGrid, Direction.WEST, 2),
-                Arguments.of(largeGrid, Direction.NORTHWEST, 4),
+                Arguments.of(largeGridString, Direction.NORTH, 2),
+                Arguments.of(largeGridString, Direction.NORTHEAST, 4),
+                Arguments.of(largeGridString, Direction.EAST, 3),
+                Arguments.of(largeGridString, Direction.SOUTHEAST, 1),
+                Arguments.of(largeGridString, Direction.SOUTH, 1),
+                Arguments.of(largeGridString, Direction.SOUTHWEST, 1),
+                Arguments.of(largeGridString, Direction.WEST, 2),
+                Arguments.of(largeGridString, Direction.NORTHWEST, 4),
             )
             .asIterable()
 
