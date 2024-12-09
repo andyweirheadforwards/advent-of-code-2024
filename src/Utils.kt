@@ -10,7 +10,8 @@ typealias Grid = List<CharArray>
 
 fun readInput(name: String) = Path("data/$name.txt").readText().trim().lines().joinToString("\n")
 
-val CharArray.string: String get() = joinToString("")
+val CharArray.string: String
+  get() = joinToString("")
 
 val GridString.grid: Grid
   get() = trim().lines().map { it.toCharArray() }

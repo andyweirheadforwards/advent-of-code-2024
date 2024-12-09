@@ -1,8 +1,8 @@
-import kotlin.test.assertEquals
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class Day09Test {
 
@@ -29,19 +29,18 @@ class Day09Test {
       end: String,
       expected: Int
   ) {
-      val diskBlocks: DiskBlocks = diskMapString.toDiskBlocks().compact()
+    val diskBlocks: DiskBlocks = diskMapString.toDiskBlocks().compact()
     assertEquals(expected.toLong(), diskBlocks.checksum)
   }
 
-    @Test
-    fun`It should de-frag disk blocks`() {
-        val diskBlocks: DiskBlocks = "2333133121414131402".toDiskBlocks()
-        //             "00...111...2...333.44.5555.6666.777.888899"
-        val expected = "00992111777.44.333....5555.6666.....8888.."
+  @Test
+  fun `It should de-frag disk blocks`() {
+    val diskBlocks: DiskBlocks = "2333133121414131402".toDiskBlocks()
+    //             "00...111...2...333.44.5555.6666.777.888899"
+    val expected = "00992111777.44.333....5555.6666.....8888.."
 
-        assertEquals(expected, diskBlocks.defragmentDiskBlocks().joinToString(""))
-    }
-
+    assertEquals(expected, diskBlocks.defragmentDiskBlocks().joinToString(""))
+  }
 
   companion object {
 
