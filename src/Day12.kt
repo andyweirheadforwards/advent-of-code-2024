@@ -9,8 +9,12 @@ fun main(): Unit = runBlocking {
 
           val garden = Garden(input)
           garden.walk()
+          val totalPrice = garden.totalPrice
+          println("What is the total price of fencing all regions on your map?     $totalPrice")
+
+          val discountTotalPrice = garden.discountTotalPrice
           println(
-              "What is the total price of fencing all regions on your map? ${garden.totalPrice}")
+              "What is the new total price of fencing all regions on your map? $discountTotalPrice")
         }
       }
       .let { println("\nAverage time taken: ${it / PROFILE_REPEAT}") }
@@ -28,8 +32,105 @@ data class Region(val type: PlantType, val plots: List<Plot>) {
 
   val perimeter: Int = plots.map { 4 - it.neighbours }.sumOf { it }
 
+  val sides: Int
+    get() {
+      val points = plots.map { it.point }
+
+      val startX = points.minOf { it.x }
+      val endX = points.maxOf { it.x }
+      val startY = points.minOf { it.y }
+      val endY = points.maxOf { it.y }
+
+      // Tops
+      val tops =
+          (startY..endY)
+              .map { y ->
+                (startX..endX)
+                    .map { x ->
+                      val point = Point(x, y)
+                      when {
+                        points.firstOrNull { it.toString() == point.toString() } == null -> 'O'
+                        points.firstOrNull {
+                          it.toString() == Point(point.x, point.y - 1).toString()
+                        } != null -> 'O'
+                        else -> 'X'
+                      }
+                    }
+                    .joinToString("")
+                    .split("O+".toRegex())
+                    .filter { !it.isBlank() }
+                    .size
+              }
+              .sumOf { it }
+
+      // Bottoms
+      val bottoms =
+          (startY..endY)
+              .map { y ->
+                (startX..endX)
+                    .map { x ->
+                      val point = Point(x, y)
+                      when {
+                        !points.contains(point) -> 'O'
+                        points.contains(Point(point.x, point.y + 1)) -> 'O'
+                        else -> 'X'
+                      }
+                    }
+                    .joinToString("")
+                    .split("O+".toRegex())
+                    .filter { !it.isBlank() }
+                    .size
+              }
+              .sumOf { it }
+
+      // Lefts
+      val lefts =
+          (startX..endX)
+              .map { x ->
+                (startY..endY)
+                    .map { y ->
+                      val point = Point(x, y)
+                      when {
+                        !points.contains(point) -> 'O'
+                        points.contains(Point(point.x - 1, point.y)) -> 'O'
+                        else -> 'X'
+                      }
+                    }
+                    .joinToString("")
+                    .split("O+".toRegex())
+                    .filter { !it.isBlank() }
+                    .size
+              }
+              .sumOf { it }
+
+      // Rights
+      val rights =
+          (startX..endX)
+              .map { x ->
+                (startY..endY)
+                    .map { y ->
+                      val point = Point(x, y)
+                      when {
+                        !points.contains(point) -> 'O'
+                        points.contains(Point(point.x + 1, point.y)) -> 'O'
+                        else -> 'X'
+                      }
+                    }
+                    .joinToString("")
+                    .split("O+".toRegex())
+                    .filter { !it.isBlank() }
+                    .size
+              }
+              .sumOf { it }
+
+      return tops + bottoms + lefts + rights
+    }
+
   val price: Int
     get() = area * perimeter
+
+  val discountPrice: Int
+    get() = area * sides
 }
 
 class Garden(val grid: Grid) {
@@ -45,6 +146,9 @@ class Garden(val grid: Grid) {
 
   val totalPrice: Int
     get() = regions.sumOf { it.price }
+
+  val discountTotalPrice: Int
+    get() = regions.sumOf { it.discountPrice }
 
   fun getRegionPoints(point: Point, type: PlantType): List<Point> {
     if (!visitedPoints.add(point.toString())) return listOf()

@@ -44,6 +44,24 @@ class Day12Test {
     assertEquals(price, region.price)
   }
 
+  @ParameterizedTest(name = "It should generate type: {1}, sides: {2}, price: {3}")
+  @MethodSource("getBulkDiscountRegions")
+  fun `It should generate regions with discount`(
+      index: Int,
+      type: PlantType,
+      sides: Int,
+      discountPrice: Int
+  ) {
+    val garden = Garden(testInput)
+    garden.walk()
+
+    val region = garden.regions[index]
+
+    assertEquals(type, region.type)
+    assertEquals(sides, region.sides)
+    assertEquals(discountPrice, region.discountPrice)
+  }
+
   @Test
   fun `It should get total price`() {
     val expected = 1930
@@ -51,6 +69,55 @@ class Day12Test {
     garden.walk()
 
     assertEquals(expected, garden.totalPrice)
+  }
+
+  @Test
+  fun `It should calculate a regions sides`() {
+    val expected = 8
+    val input =
+        """
+            .....
+            .AA..
+            ..AA.
+            .....
+        """
+            .trimIndent()
+
+    val garden = Garden(input)
+    garden.walk()
+    val region = garden.regions.first { it.type == 'A' }
+
+    assertEquals(expected, region.sides)
+  }
+
+  @Test
+  fun `It should get numbers of sides`() {
+    val input =
+        """
+            AAAA
+            BBCD
+            BBCC
+            EEEC
+        """
+            .trimIndent()
+
+    val garden = Garden(input)
+    garden.walk()
+
+    assertEquals(4, garden.regions.first { it.type == 'A' }.sides)
+    assertEquals(4, garden.regions.first { it.type == 'B' }.sides)
+    assertEquals(8, garden.regions.first { it.type == 'C' }.sides)
+    assertEquals(4, garden.regions.first { it.type == 'D' }.sides)
+    assertEquals(4, garden.regions.first { it.type == 'E' }.sides)
+  }
+
+  @ParameterizedTest(name = "It should be {1}")
+  @MethodSource("getBulkDiscountExamples")
+  fun `It should get bulk discount total price`(input: GridString, expected: Int) {
+    val garden = Garden(input)
+    garden.walk()
+
+    assertEquals(expected, garden.discountTotalPrice)
   }
 
   companion object {
@@ -85,6 +152,70 @@ class Day12Test {
                 Arguments.of(9, 'M', 5, 12, 60),
                 Arguments.of(10, 'S', 3, 8, 24),
             )
+            .iterator()
+
+    @JvmStatic
+    fun getBulkDiscountRegions() =
+        listOf(
+                // region: type, area, perimeter, price
+                Arguments.of(0, 'R', 10, 120),
+                Arguments.of(1, 'I', 4, 16),
+                Arguments.of(2, 'C', 22, 308),
+                Arguments.of(3, 'F', 12, 120),
+                Arguments.of(4, 'V', 10, 130),
+                Arguments.of(5, 'J', 12, 132),
+                Arguments.of(6, 'C', 4, 4),
+                Arguments.of(7, 'E', 8, 104),
+                Arguments.of(8, 'I', 16, 224),
+                Arguments.of(9, 'M', 6, 30),
+                Arguments.of(10, 'S', 6, 18),
+            )
+            .iterator()
+
+    @JvmStatic
+    fun getBulkDiscountExamples() =
+        listOf(
+                Arguments.of(
+                    """
+                        AAAA
+                        BBCD
+                        BBCC
+                        EEEC
+                    """
+                        .trimIndent(),
+                    80),
+                Arguments.of(
+                    """
+                        OOOOO
+                        OXOXO
+                        OOOOO
+                        OXOXO
+                        OOOOO
+                    """
+                        .trimIndent(),
+                    436),
+                Arguments.of(
+                    """
+                        EEEEE
+                        EXXXX
+                        EEEEE
+                        EXXXX
+                        EEEEE
+                    """
+                        .trimIndent(),
+                    236),
+                Arguments.of(
+                    """
+                        AAAAAA
+                        AAABBA
+                        AAABBA
+                        ABBAAA
+                        ABBAAA
+                        AAAAAA
+                    """
+                        .trimIndent(),
+                    (4 * 4) + (4 * 4) + ((36 - 8) * 12)),
+                Arguments.of(testInput, 1206))
             .iterator()
   }
 }
