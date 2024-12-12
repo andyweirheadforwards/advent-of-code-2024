@@ -94,7 +94,7 @@ class Day10Test {
 
     val start = TrailPosition(Point(1, 1), 5)
 
-    assertEquals(expected.joinToString("\n"), input.getNeighbours(start).joinToString("\n"))
+    assertEquals(expected.joinToString("\n"), input.getNeighbours(start.point).joinToString("\n"))
   }
 
   @Test

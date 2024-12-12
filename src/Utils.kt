@@ -24,6 +24,15 @@ fun Grid.setSymbolAt(point: Point, symbol: Char = GUARD_LOCATION): Grid {
   return this
 }
 
+fun Grid.getNeighbours(point: Point): List<Point> =
+  listOf(
+    Point(point.x, point.y - 1),
+    Point(point.x - 1, point.y),
+    Point(point.x + 1, point.y),
+    Point(point.x, point.y + 1),
+  )
+    .filter { it.x >= 0 && it.x <= lastIndexX && it.y >= 0 && it.y <= lastIndexY }
+
 fun Grid.getSymbolAt(point: Point): Char = this[point.y][point.x]
 
 fun Grid.isValidPoint(point: Point) =

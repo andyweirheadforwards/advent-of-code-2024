@@ -31,17 +31,8 @@ fun TrailMap.findTrailHeads(): List<Point> = flatMapIndexed { y, row ->
   row.mapIndexed { x, height -> if (height == '0') Point(x, y) else null }.filterNotNull()
 }
 
-fun TrailMap.getNeighbours(position: TrailPosition): List<Point> =
-    listOf(
-            Point(position.point.x, position.point.y - 1),
-            Point(position.point.x - 1, position.point.y),
-            Point(position.point.x + 1, position.point.y),
-            Point(position.point.x, position.point.y + 1),
-        )
-        .filter { it.x >= 0 && it.x <= lastIndexX && it.y >= 0 && it.y <= lastIndexY }
-
 fun TrailMap.getNextTrailPoints(position: TrailPosition): List<Point> =
-    getNeighbours(position).filter {
+    getNeighbours(position.point).filter {
       val nextHeight = "${position.height + 1}".toCharArray().first()
       getSymbolAt(it) == nextHeight
     }
