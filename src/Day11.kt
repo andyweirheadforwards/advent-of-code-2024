@@ -1,7 +1,6 @@
-import kotlinx.coroutines.runBlocking
 import kotlin.time.measureTime
 
-fun main(): Unit = runBlocking {
+fun main() {
   measureTime {
         repeat(PROFILE_REPEAT) {
           val input = readInput("Day11").stones
