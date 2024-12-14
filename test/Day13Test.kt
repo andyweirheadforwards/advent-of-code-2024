@@ -1,3 +1,4 @@
+import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
@@ -46,37 +47,41 @@ class Day13Test {
     assertEquals(expected, result)
   }
 
-    @Test
-    fun `It should extract machine data one`() {
-        val expected =
-            ClawMachine(Button(94, 34, BUTTON_COST_A), Button(22, 67, BUTTON_COST_B), LongPoint(8400, 5400))
-        val input =
-            """
+  @Test
+  fun `It should extract machine data one`() {
+    val expected =
+        ClawMachine(
+            Button(94, 34, BUTTON_COST_A), Button(22, 67, BUTTON_COST_B), LongPoint(8400, 5400))
+    val input =
+        """
                 Button A: X+94, Y+34
                 Button B: X+22, Y+67
                 Prize: X=8400, Y=5400
             """
-                .trimIndent()
-                .lines()
+            .trimIndent()
+            .lines()
 
-        assertEquals(expected.toString(), input.toClawMachineOne().toString())
-    }
+    assertEquals(expected.toString(), input.toClawMachineOne().toString())
+  }
 
-    @Test
-    fun `It should extract machine data two`() {
-        val expected =
-            ClawMachine(Button(94, 34, BUTTON_COST_A), Button(22, 67, BUTTON_COST_B), LongPoint(10000000008400, 10000000005400))
-        val input =
-            """
+  @Test
+  fun `It should extract machine data two`() {
+    val expected =
+        ClawMachine(
+            Button(94, 34, BUTTON_COST_A),
+            Button(22, 67, BUTTON_COST_B),
+            LongPoint(10000000008400, 10000000005400))
+    val input =
+        """
                 Button A: X+94, Y+34
                 Button B: X+22, Y+67
                 Prize: X=8400, Y=5400
             """
-                .trimIndent()
-                .lines()
+            .trimIndent()
+            .lines()
 
-        assertEquals(expected.toString(), input.toClawMachineTwo().toString())
-    }
+    assertEquals(expected.toString(), input.toClawMachineTwo().toString())
+  }
 
   @ParameterizedTest(name = "button {0} <= point {1} = {2}")
   @MethodSource("getButtonComparators")
@@ -108,7 +113,7 @@ class Day13Test {
 
   @Test
   fun `It should cost 280 tokens`() {
-    val expected = 280
+    val expected = 280L
     val input =
         """
             Button A: X+94, Y+34
@@ -121,18 +126,49 @@ class Day13Test {
     assertEquals(expected, input.toClawMachineOne().cost)
   }
 
+  @Test
+  fun `It should cost 459236326669 tokens`() {
+    val expected = 459236326669L
+    val input =
+        """
+            Button A: X+26, Y+66
+            Button B: X+67, Y+21
+            Prize: X=12748, Y=12176
+        """
+            .trimIndent()
+            .lines()
+
+    assertEquals(expected, input.toClawMachineTwo().cost)
+  }
+
   @ParameterizedTest(name = "index {0} should cost {1}")
-  @MethodSource("getMachinePrizes")
-  fun `It should calculate machine prize cost`(index: Int, expected: Int?) {
+  @MethodSource("getMachinePrizesOne")
+  fun `It should calculate machine prize cost one`(index: Int, expected: Long?) {
     val input = testInput.toRawMachineLinesList()[index].toClawMachineOne()
 
     assertEquals(expected, input.cost)
   }
 
+  @ParameterizedTest(name = "index {0} should cost {1}")
+  @MethodSource("getMachinePrizesTwo")
+  fun `It should calculate machine prize cost two`(index: Int, expected: Long?) {
+    val input = testInput.toRawMachineLinesList()[index].toClawMachineTwo()
+
+    assertEquals(expected, input.cost)
+  }
+
   @Test
-  fun `It should calculate cost for all prizes`() {
-    val expected = 480
-    val input = testInput.costOfAllPrizesOne
+  fun `It should calculate cost for all prizes one`() {
+    val expected = 480L
+    val input = testInput.costOfAllPrizesOne()
+
+    assertEquals(expected, input)
+  }
+
+  @Test
+  fun `It should calculate cost for all prizes two`() = runBlocking {
+    val expected = 875318608908L
+    val input = testInput.costOfAllPrizesTwo()
 
     assertEquals(expected, input)
   }
@@ -172,13 +208,35 @@ class Day13Test {
             .iterator()
 
     @JvmStatic
-    fun getMachinePrizes() =
+    fun getMachinePrizesOne() =
         listOf(
                 // index, prizeCost
-                Arguments.of(0, 280),
+                Arguments.of(0, 280L),
                 Arguments.of(1, null),
-                Arguments.of(2, 200),
+                Arguments.of(2, 200L),
                 Arguments.of(3, null),
+            )
+            .iterator()
+
+    @JvmStatic
+    fun getMachinePrizesTwo() =
+        listOf(
+                // index, prizeCost
+                Arguments.of(0, null),
+                Arguments.of(1, 459236326669L),
+                Arguments.of(2, null),
+                Arguments.of(3, 416082282239L),
+            )
+            .iterator()
+
+    @JvmStatic
+    fun getGcdData() =
+        listOf(
+                // a, b, c, x, y
+                Arguments.of(94, 22, 8400L, 80, 40),
+                Arguments.of(17, 84, 7870L, 38, 86),
+                Arguments.of(26, 67, 10000000012748L, 12, 34),
+                Arguments.of(69, 27, 10000000018641L, 12, 34),
             )
             .iterator()
   }
