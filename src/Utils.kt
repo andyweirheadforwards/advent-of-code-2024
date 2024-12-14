@@ -55,3 +55,8 @@ operator fun Point.minus(point: Point): Point {
 }
 
 fun Point.diff(point: Point): Point = point - this
+
+fun clearScreen() {
+  System.out.print("\\033[H\\033[2J")
+  System.out.flush()
+}
