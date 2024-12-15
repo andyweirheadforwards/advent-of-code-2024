@@ -57,8 +57,8 @@ val Stones.stonesMap: StonesMap
   get() = mutableMapOf<Stone, Long>().apply { addStones(this@stonesMap) }
 
 fun StonesMap.addStones(stones: Stones): StonesMap {
-    stones.forEach { this.put(it, this.getOrDefault(it, 0L) + 1) }
-    return this
+  stones.forEach { this.put(it, this.getOrDefault(it, 0L) + 1) }
+  return this
 }
 
 fun StonesMap.blink(blinks: Int): StonesMap {
