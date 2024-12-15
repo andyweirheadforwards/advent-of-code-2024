@@ -19,6 +19,16 @@ val GridString.grid: Grid
 val Grid.string: GridString
   get() = joinToString("\n") { it.joinToString("") }
 
+fun Grid.getSymbolAt(point: Point, direction: Direction? = null): Char =
+    when (direction) {
+      null -> this[point.y][point.x]
+      Direction.NORTH -> getSymbolAt(Point(point.x, point.y - 1))
+      Direction.SOUTH -> getSymbolAt(Point(point.x, point.y + 1))
+      Direction.EAST -> getSymbolAt(Point(point.x + 1, point.y))
+      Direction.WEST -> getSymbolAt(Point(point.x - 1, point.y))
+      else -> error("Invalid direction $direction")
+    }
+
 fun Grid.setSymbolAt(point: Point, symbol: Char = GUARD_LOCATION): Grid {
   this[point.y][point.x] = symbol
   return this
@@ -32,8 +42,6 @@ fun Grid.getNeighbours(point: Point): List<Point> =
             Point(point.x, point.y + 1),
         )
         .filter { it.x >= 0 && it.x <= lastIndexX && it.y >= 0 && it.y <= lastIndexY }
-
-fun Grid.getSymbolAt(point: Point): Char = this[point.y][point.x]
 
 fun Grid.isValidPoint(point: Point) =
     when {
@@ -55,6 +63,15 @@ operator fun Point.minus(point: Point): Point {
 }
 
 fun Point.diff(point: Point): Point = point - this
+
+fun Point.move(direction: Direction): Unit =
+    when (direction) {
+      Direction.NORTH -> move(x, y - 1)
+      Direction.SOUTH -> move(x, y + 1)
+      Direction.EAST -> move(x + 1, y)
+      Direction.WEST -> move(x - 1, y)
+      else -> error("Invalid direction $direction")
+    }
 
 fun clearScreen() {
   System.out.print("\\033[H\\033[2J")
