@@ -9,7 +9,8 @@ data class MazeNode(
     val point: Point,
     val direction: Direction,
     var score: Int = Int.MAX_VALUE,
-    var previous: MazeNode? = null
+    var previous: MazeNode? = null,
+    var path: List<Point> = listOf(),
 ) : Comparable<MazeNode> {
 
   override fun compareTo(other: MazeNode): Int = score.compareTo(other.score)

@@ -8,6 +8,7 @@ import getSymbolAt
 import grid
 import isValidPoint
 import move
+import string
 import java.awt.Point
 import java.util.*
 
@@ -18,6 +19,10 @@ const val DEAD_END_SCORE = Int.MAX_VALUE
 const val MAZE_START = 'S'
 const val MAZE_WALL = '#'
 const val MAZE_FINISH = 'E'
+
+typealias MazePath = List<Point>
+
+typealias MazeSolution = Pair<Int, List<MazePath>>
 
 class Maze(private val grid: Grid) {
   companion object {
@@ -31,22 +36,48 @@ class Maze(private val grid: Grid) {
   val finish: Point =
       grid.findFirst(MAZE_FINISH) ?: throw IllegalArgumentException("Finish not found")
 
-  fun solve(): Int = dijkstra()
+  fun solve(): MazeSolution = dijkstra()
 
-  private fun dijkstra(): Int {
+  override fun toString(): String {
+    val (_, paths) = solve()
+    val pathPoints = paths.flatten().toSet()
+    val gridCopy = grid.map { it.copyOf() }
+
+    for (point in pathPoints) {
+      gridCopy[point.y][point.x] = 'O'
+    }
+
+    return gridCopy.string
+  }
+
+  private fun dijkstra(): MazeSolution {
     val openSet = PriorityQueue<MazeNode>(compareBy { it.score })
-    val visited = mutableSetOf<MazeNodePair>()
+    val visited = mutableMapOf<MazeNodePair, Int>()
+    val paths = mutableListOf<MazePath>()
 
     start.score = 0
+    start.path = listOf(start.point)
     openSet.add(start)
+
+    var lowestScore = DEAD_END_SCORE
 
     while (openSet.isNotEmpty()) {
       val current = openSet.poll()
 
-      if (current.point == finish) return current.score
+      if (current.point == finish) {
+        if (current.score < lowestScore) {
+          lowestScore = current.score
+          paths.clear()
+        }
+        if (current.score == lowestScore) {
+          paths.add(current.path)
+        }
+        continue
+      }
 
-      if (Pair(current.point, current.direction) in visited) continue
-      visited.add(Pair(current.point, current.direction)) // Add to visited
+      val currentPair = current.toPair()
+      if (currentPair in visited && visited[currentPair]!! < current.score) continue
+      visited[currentPair] = current.score
 
       for (neighbor in getNeighbors(current)) {
         if (grid.getSymbolAt(neighbor.point) == MAZE_WALL) continue
@@ -54,15 +85,20 @@ class Maze(private val grid: Grid) {
         val score = calculateScoreForNeighbor(current, neighbor)
         val tentativeScore = current.score + score
 
-        if (tentativeScore < neighbor.score) {
+        if (tentativeScore <= neighbor.score) {
           neighbor.score = tentativeScore
           neighbor.previous = current
+          if (neighbor.point != current.point) {
+            neighbor.path = current.path + neighbor.point
+          } else {
+            neighbor.path = current.path
+          }
           openSet.add(neighbor)
         }
       }
     }
 
-    return DEAD_END_SCORE // No path found
+    return Pair(lowestScore, paths)
   }
 
   private fun getNeighbors(node: MazeNode): Sequence<MazeNode> {
@@ -72,19 +108,11 @@ class Maze(private val grid: Grid) {
     val forwardPoint = getNextPoint(point, direction)
     val isForwardBlocked =
         !grid.isValidPoint(forwardPoint) || grid.getSymbolAt(forwardPoint) == MAZE_WALL
-    val isLeftBlocked = grid.getSymbolAt(point, direction.turnCcw()) == MAZE_WALL
-    val isRightBlocked = grid.getSymbolAt(point, direction.turnCw()) == MAZE_WALL
-
-    // If all directions are blocked, return no neighbors (dead-end)
-    if (isForwardBlocked && isLeftBlocked && isRightBlocked) {
-      node.score = DEAD_END_SCORE
-      return emptySequence() // Using sequence to avoid creating an unnecessary list
-    }
 
     return sequence {
       if (!isForwardBlocked) yield(move(node))
-      if (!isLeftBlocked) yield(turnCcw(node))
-      if (!isRightBlocked) yield(turnCw(node))
+      yield(turnCcw(node))
+      yield(turnCw(node))
     }
   }
 
