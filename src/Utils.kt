@@ -26,7 +26,6 @@ fun Grid.getSymbolAt(point: Point, direction: Direction? = null): Char =
       Direction.SOUTH -> getSymbolAt(Point(point.x, point.y + 1))
       Direction.EAST -> getSymbolAt(Point(point.x + 1, point.y))
       Direction.WEST -> getSymbolAt(Point(point.x - 1, point.y))
-      else -> error("Invalid direction $direction")
     }
 
 fun Grid.setSymbolAt(point: Point, symbol: Char = GUARD_LOCATION): Grid {
@@ -42,6 +41,15 @@ fun Grid.getNeighbours(point: Point): List<Point> =
             Point(point.x, point.y + 1),
         )
         .filter { it.x >= 0 && it.x <= lastIndexX && it.y >= 0 && it.y <= lastIndexY }
+
+fun Grid.findFirst(symbol: Char): Point? =
+    withIndex().firstNotNullOfOrNull { (y, row) ->
+      row.indexOfFirst { it == symbol }.takeIf { it != -1 }?.let { x -> Point(x, y) }
+    }
+
+fun Grid.findAll(symbol: Char): List<Point> = flatMapIndexed { y, row ->
+  row.toList().mapIndexedNotNull { x, cell -> if (cell == symbol) Point(x, y) else null }
+}
 
 fun Grid.isValidPoint(point: Point) =
     when {
@@ -70,10 +78,27 @@ fun Point.move(direction: Direction): Unit =
       Direction.SOUTH -> move(x, y + 1)
       Direction.EAST -> move(x + 1, y)
       Direction.WEST -> move(x - 1, y)
-      else -> error("Invalid direction $direction")
     }
 
 fun clearScreen() {
   System.out.print("\\033[H\\033[2J")
   System.out.flush()
+}
+
+enum class Direction {
+  NORTH,
+  EAST,
+  SOUTH,
+  WEST
+}
+
+enum class OrdinalDirection {
+  NORTH,
+  NORTHEAST,
+  EAST,
+  SOUTHEAST,
+  SOUTH,
+  SOUTHWEST,
+  WEST,
+  NORTHWEST
 }

@@ -8,30 +8,19 @@ fun main() {
   println("How many times does an X-MAS appear? ${input.searchForXMas()}")
 }
 
-enum class Direction {
-  NORTH,
-  NORTHEAST,
-  EAST,
-  SOUTHEAST,
-  SOUTH,
-  SOUTHWEST,
-  WEST,
-  NORTHWEST
-}
+fun GridString.searchForWord(word: String, direction: OrdinalDirection? = null): Int {
 
-fun GridString.searchForWord(word: String, direction: Direction? = null): Int {
-
-  if (direction == null) return Direction.entries.sumOf { searchForWord(word, it) }
+  if (direction == null) return OrdinalDirection.entries.sumOf { searchForWord(word, it) }
 
   return when (direction) {
-        Direction.NORTH -> this.rotatedCW()
-        Direction.NORTHEAST -> this.slopeRight().rotatedCW()
-        Direction.EAST -> this
-        Direction.SOUTHEAST -> this.slopeLeft().rotatedCCW()
-        Direction.SOUTH -> this.rotatedCCW()
-        Direction.SOUTHWEST -> this.slopeRight().rotatedCCW()
-        Direction.WEST -> reverseHorizontal()
-        Direction.NORTHWEST -> this.slopeLeft().rotatedCW()
+        OrdinalDirection.NORTH -> this.rotatedCW()
+        OrdinalDirection.NORTHEAST -> this.slopeRight().rotatedCW()
+        OrdinalDirection.EAST -> this
+        OrdinalDirection.SOUTHEAST -> this.slopeLeft().rotatedCCW()
+        OrdinalDirection.SOUTH -> this.rotatedCCW()
+        OrdinalDirection.SOUTHWEST -> this.slopeRight().rotatedCCW()
+        OrdinalDirection.WEST -> reverseHorizontal()
+        OrdinalDirection.NORTHWEST -> this.slopeLeft().rotatedCW()
       }
       .let { "($WORD)".toRegex().findAll(it) }
       .count()

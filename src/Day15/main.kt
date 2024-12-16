@@ -1,8 +1,8 @@
 package Day15
 
 import PROFILE_REPEAT
-import kotlin.time.measureTime
 import readInput
+import kotlin.time.measureTime
 
 fun main() {
   measureTime {

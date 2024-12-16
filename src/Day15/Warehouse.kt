@@ -29,11 +29,11 @@ internal constructor(val grid: Grid, val directions: List<Direction>, robot: Poi
             .takeLastWhile { it.isNotBlank() }
             .joinToString("")
             .map {
-              when {
-                it == '^' -> Direction.NORTH
-                it == 'v' -> Direction.SOUTH
-                it == '<' -> Direction.WEST
-                it == '>' -> Direction.EAST
+              when (it) {
+                '^' -> Direction.NORTH
+                'v' -> Direction.SOUTH
+                '<' -> Direction.WEST
+                '>' -> Direction.EAST
                 else -> error("Invalid symbol $it")
               }
             }

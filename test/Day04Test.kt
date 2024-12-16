@@ -8,7 +8,11 @@ class Day04Test {
 
   @ParameterizedTest(name = "It should find {2} instances of WORD facing {1}")
   @MethodSource("getSmallGridString")
-  fun `It should find WORD in small grid`(grid: GridString, direction: Direction, expected: Int) {
+  fun `It should find WORD in small grid`(
+      grid: GridString,
+      direction: OrdinalDirection,
+      expected: Int
+  ) {
     assertEquals(expected, grid.searchForWord(WORD, direction))
   }
 
@@ -20,7 +24,11 @@ class Day04Test {
 
   @ParameterizedTest(name = "It should find {2} instances of WORD facing {1}")
   @MethodSource("getLargeGridString")
-  fun `It should find WORD in large grid`(grid: GridString, direction: Direction, expected: Int) {
+  fun `It should find WORD in large grid`(
+      grid: GridString,
+      direction: OrdinalDirection,
+      expected: Int
+  ) {
     assertEquals(expected, grid.searchForWord(WORD, direction))
   }
 
@@ -202,14 +210,14 @@ class Day04Test {
     @JvmStatic
     fun getSmallGridString() =
         listOf(
-                Arguments.of(smallGridString, Direction.NORTH, 1),
-                Arguments.of(smallGridString, Direction.NORTHEAST, 0),
-                Arguments.of(smallGridString, Direction.EAST, 1),
-                Arguments.of(smallGridString, Direction.SOUTHEAST, 1),
-                Arguments.of(smallGridString, Direction.SOUTH, 0),
-                Arguments.of(smallGridString, Direction.SOUTHWEST, 0),
-                Arguments.of(smallGridString, Direction.WEST, 1),
-                Arguments.of(smallGridString, Direction.NORTHWEST, 0),
+                Arguments.of(smallGridString, OrdinalDirection.NORTH, 1),
+                Arguments.of(smallGridString, OrdinalDirection.NORTHEAST, 0),
+                Arguments.of(smallGridString, OrdinalDirection.EAST, 1),
+                Arguments.of(smallGridString, OrdinalDirection.SOUTHEAST, 1),
+                Arguments.of(smallGridString, OrdinalDirection.SOUTH, 0),
+                Arguments.of(smallGridString, OrdinalDirection.SOUTHWEST, 0),
+                Arguments.of(smallGridString, OrdinalDirection.WEST, 1),
+                Arguments.of(smallGridString, OrdinalDirection.NORTHWEST, 0),
             )
             .asIterable()
 
@@ -231,14 +239,14 @@ class Day04Test {
     @JvmStatic
     fun getLargeGridString() =
         listOf(
-                Arguments.of(largeGridString, Direction.NORTH, 2),
-                Arguments.of(largeGridString, Direction.NORTHEAST, 4),
-                Arguments.of(largeGridString, Direction.EAST, 3),
-                Arguments.of(largeGridString, Direction.SOUTHEAST, 1),
-                Arguments.of(largeGridString, Direction.SOUTH, 1),
-                Arguments.of(largeGridString, Direction.SOUTHWEST, 1),
-                Arguments.of(largeGridString, Direction.WEST, 2),
-                Arguments.of(largeGridString, Direction.NORTHWEST, 4),
+                Arguments.of(largeGridString, OrdinalDirection.NORTH, 2),
+                Arguments.of(largeGridString, OrdinalDirection.NORTHEAST, 4),
+                Arguments.of(largeGridString, OrdinalDirection.EAST, 3),
+                Arguments.of(largeGridString, OrdinalDirection.SOUTHEAST, 1),
+                Arguments.of(largeGridString, OrdinalDirection.SOUTH, 1),
+                Arguments.of(largeGridString, OrdinalDirection.SOUTHWEST, 1),
+                Arguments.of(largeGridString, OrdinalDirection.WEST, 2),
+                Arguments.of(largeGridString, OrdinalDirection.NORTHWEST, 4),
             )
             .asIterable()
 
