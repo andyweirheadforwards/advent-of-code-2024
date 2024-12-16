@@ -51,7 +51,7 @@ fun Grid.findAll(symbol: Char): List<Point> = flatMapIndexed { y, row ->
   row.toList().mapIndexedNotNull { x, cell -> if (cell == symbol) Point(x, y) else null }
 }
 
-fun Grid.isValidPoint(point: Point) =
+fun Grid.isValidPoint(point: Point): Boolean =
     when {
       point.x < 0 || point.x > this.first().lastIndex -> false
       point.y < 0 || point.y > this.lastIndex -> false
@@ -89,7 +89,23 @@ enum class Direction {
   NORTH,
   EAST,
   SOUTH,
-  WEST
+  WEST;
+
+  fun turnCw(): Direction =
+      when (this) {
+        NORTH -> EAST
+        EAST -> SOUTH
+        SOUTH -> WEST
+        WEST -> NORTH
+      }
+
+  fun turnCcw(): Direction =
+      when (this) {
+        NORTH -> WEST
+        WEST -> SOUTH
+        SOUTH -> EAST
+        EAST -> NORTH
+      }
 }
 
 enum class OrdinalDirection {
