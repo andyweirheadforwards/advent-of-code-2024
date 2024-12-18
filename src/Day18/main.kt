@@ -2,8 +2,8 @@ package Day18
 
 import PROFILE_REPEAT
 import coordinates
-import kotlin.time.measureTime
 import readInput
+import kotlin.time.measureTime
 
 fun main() {
   measureTime {
