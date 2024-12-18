@@ -78,7 +78,7 @@ class Day17Test {
             .trimIndent()
 
     val computer = Computer(input)
-    val result = computer.run()
+    val result = computer.output
     assertEquals(0, computer.getRegisterValue(REGISTER_A))
     assertEquals(1, computer.getRegisterValue(REGISTER_B))
     assertEquals(2, computer.getRegisterValue(REGISTER_C))
@@ -132,7 +132,7 @@ class Day17Test {
             .trimIndent()
 
     val computer = Computer(input)
-    val result = computer.run()
+    val result = computer.output
     assertEquals("3", result)
   }
 
@@ -183,7 +183,7 @@ class Day17Test {
             .trimIndent()
 
     val computer = Computer(input)
-    val output = computer.run()
+    val output = computer.output
     assertEquals("0,1,2", output)
   }
 
@@ -234,7 +234,7 @@ class Day17Test {
             .trimIndent()
 
     val computer = Computer(input)
-    val output = computer.run()
+    val output = computer.output
     assertEquals("4,2,5,6,7,7,7,7,3,1,0", output)
     assertEquals(0, computer.getRegisterValue(REGISTER_A))
   }
@@ -242,8 +242,25 @@ class Day17Test {
   @Test
   fun `It should output the correct result for testInput`() {
     val computer = Computer(testInput)
-    val output = computer.run()
+    val output = computer.output
     assertEquals("4,6,3,5,6,3,5,2,1,0", output)
+  }
+
+  @Test
+  fun `It should search for the value of A that results in outputting the input program`() {
+    val input =
+        """
+            Register A: 2024
+            Register B: 0
+            Register C: 0
+
+            Program: 0,3,5,4,3,0
+        """
+            .trimIndent()
+
+    val computer = Computer(input)
+    val solution = computer.searchForA()
+    assertEquals(117440L, solution)
   }
 
   companion object {
