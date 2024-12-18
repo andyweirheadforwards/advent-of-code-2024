@@ -80,6 +80,9 @@ fun Point.move(direction: Direction): Unit =
       Direction.WEST -> move(x - 1, y)
     }
 
+val Point.coordinates: String
+  get() = "$x,$y)"
+
 fun clearScreen() {
   System.out.print("\\033[H\\033[2J")
   System.out.flush()
