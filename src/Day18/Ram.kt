@@ -3,10 +3,10 @@ package Day18
 import Day16.DEAD_END_SCORE
 import Direction
 import Grid
-import move
-import string
 import java.awt.Point
 import java.util.*
+import move
+import string
 
 typealias Byte = Point
 
@@ -39,11 +39,22 @@ class Ram(private val corruptedBytes: CorruptedBytes, private val size: Int) {
   fun solve(time: Int = corruptedBytes.size): MemorySolution = dijkstra(time)
 
   fun solveLastByte(): Byte {
-    (0..corruptedBytes.size).forEach {
-      val (steps) = solve(it)
-      if (steps == Int.MAX_VALUE) return corruptedBytes.elementAt(it - 1)
+    var low = 0
+    var high = corruptedBytes.size
+    var result: Byte? = null
+
+    while (low <= high) {
+      val mid = (low + high) / 2
+      val (steps) = solve(mid)
+      if (steps == Int.MAX_VALUE) {
+        result = corruptedBytes.elementAt(mid - 1)
+        high = mid - 1
+      } else {
+        low = mid + 1
+      }
     }
-    error("Failed to solve last byte")
+
+    return result ?: error("Failed to solve last byte")
   }
 
   fun toString(time: Int = corruptedBytes.size): String = grid(time).string
