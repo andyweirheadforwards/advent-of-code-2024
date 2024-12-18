@@ -3,10 +3,10 @@ package Day18
 import Day16.DEAD_END_SCORE
 import Direction
 import Grid
-import java.awt.Point
-import java.util.*
 import move
 import string
+import java.awt.Point
+import java.util.*
 
 typealias Byte = Point
 
