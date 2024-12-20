@@ -34,15 +34,15 @@ data class ClawMachine(val buttonA: Button, val buttonB: Button, val prizeLocati
     val intersectionX = aX * t
 
     // Calculate the number of A presses
-    val aPresses = t.toLong()
+    val aPresses = t
 
     // Calculate the number of B presses
-    val bPresses = ((cX - intersectionX) / bX).toLong()
+    val bPresses = ((cX - intersectionX) / bX)
 
     // Check if the result is valid
     if (aX * aPresses + bX * bPresses != cX) return null
     if (aY * aPresses + bY * bPresses != cY) return null
-    if (aPresses <= 0 && bPresses < 0) return null
+    if (aPresses < 0 || bPresses < 0) return null
 
     return Pair(aPresses, bPresses)
   }
