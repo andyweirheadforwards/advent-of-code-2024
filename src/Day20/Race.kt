@@ -1,15 +1,13 @@
 package Day20
 
-import Direction
 import Grid
 import findFirst
 import getNeighbours
 import getSymbolAt
 import grid
-import isValidPoint
-import move
 import string
 import java.awt.Point
+import kotlin.math.abs
 
 private const val RACE_START = 'S'
 private const val RACE_FINISH = 'E'
@@ -25,8 +23,8 @@ class Race(private val track: Grid) {
     val finish: Point = track.findFirst(RACE_FINISH)!!
 
     val path: List<Point> by lazy {
+        val path = mutableListOf(start)
         var curr = start
-        val path = mutableListOf(curr)
         while (curr != finish) {
             val prev = if (path.size < 2) Point(-1, -1) else path[path.lastIndex - 1]
             val next = track.getNeighbours(curr).first { it != prev && track.getSymbolAt(it) != RACE_WALL }
@@ -36,33 +34,23 @@ class Race(private val track: Grid) {
         path
     }
 
-    private val pathIndexMap by lazy { path.withIndex().associate { it.value to it.index } }
+    fun solveOne() = findShortcuts(2).map { path.size - it }
 
-    fun solveOne() = findShortcuts().map { path.size - it.size }
+    fun solveTwo() = findShortcuts(20).map { path.size - it }
 
-    fun findShortcuts(): List<List<Point>> {
-        return path.flatMapIndexed { index, point ->
-            potentialShortcuts(point).filter { shortcutPoint ->
-                pathIndexMap[shortcutPoint]?.let { it > index } == true
-            }
-                .flatMap { shortcutPoint ->
-                    val middleX = point.x + ((shortcutPoint.x - point.x) / 2)
-                    val middleY = point.y + ((shortcutPoint.y - point.y) / 2)
-                    val beginning = path.subList(0, index + 1)
-                    val middle = listOf(Point(middleX, middleY))
-                    val end = path.subList(path.indexOf(shortcutPoint), path.size)
-                    listOf(beginning + middle + end)
-                }
+    fun findShortcuts(time: Int): List<Int> = path.indices.flatMap { scStartIndex ->
+        (scStartIndex + 2 until path.size).mapNotNull { scFinishIndex ->
+            val dist = manhattanDistance(path[scStartIndex], path[scFinishIndex])
+            if (dist in 2..time) {
+                val shortcut = scStartIndex + dist + path.size - scFinishIndex
+                if (shortcut < path.size) shortcut else null
+            } else null
         }
     }
 
-
     override fun toString(): String = track.string
 
-    private fun potentialShortcuts(point: Point): List<Point> = Direction.entries.mapNotNull { direction ->
-        val shortcut = Point(point)
-        shortcut.move(direction)
-        shortcut.move(direction)
-        if (track.isValidPoint(shortcut)) shortcut else null
+    private fun manhattanDistance(p1: Point, p2: Point): Int {
+        return abs(p1.x - p2.x) + abs(p2.y - p1.y)
     }
 }
