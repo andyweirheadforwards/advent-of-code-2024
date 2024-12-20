@@ -1,12 +1,11 @@
 package Day18
 
-import Day16.DEAD_END_SCORE
 import Direction
 import Grid
+import dijkstra
 import move
 import string
 import java.awt.Point
-import java.util.*
 
 typealias Byte = Point
 
@@ -36,7 +35,12 @@ class Ram(private val corruptedBytes: CorruptedBytes, private val size: Int) {
     }
   }
 
-  fun solve(time: Int = corruptedBytes.size): MemorySolution = dijkstra(time)
+  fun solve(time: Int = corruptedBytes.size): MemorySolution {
+    val timeBytes = corruptedBytes.take(time).toSet()
+    val path = dijkstra(start.byte, finish) { getNeighbors(it, timeBytes) }
+    val score = path?.lastIndex ?: Int.MAX_VALUE
+    return Pair(score, listOf(path ?: emptyList()))
+  }
 
   fun solveLastByte(): Byte {
     var low = 0
@@ -59,82 +63,15 @@ class Ram(private val corruptedBytes: CorruptedBytes, private val size: Int) {
 
   fun toString(time: Int = corruptedBytes.size): String = grid(time).string
 
-  private fun dijkstra(time: Int): MemorySolution {
-    val openSet = PriorityQueue<MemorySpace>(compareBy { it.score })
-    val visited = HashSet<Byte>()
-    val paths = mutableListOf<MemoryPath>()
-
-    val timeBytes = corruptedBytes.take(time).toSet()
-
-    start.score = 0
-    openSet.add(start)
-
-    var lowestScore = DEAD_END_SCORE
-
-    while (openSet.isNotEmpty()) {
-      val current = openSet.poll()
-
-      if (current.byte == finish) {
-        if (current.score < lowestScore) {
-          lowestScore = current.score
-          paths.clear()
-        }
-        if (current.score == lowestScore) {
-          paths.add(current.path)
-        }
-        continue
-      }
-
-      if (current.byte in visited) continue
-      visited.add(current.byte)
-
-      for (neighbor in getNeighbors(current, timeBytes)) {
-        if (timeBytes.contains(neighbor.byte)) continue
-
-        val score = calculateScoreForNeighbor(neighbor, timeBytes)
-        val tentativeScore = current.score + score
-
-        if (tentativeScore <= neighbor.score) {
-          neighbor.score = tentativeScore
-          neighbor.previous = current
-          openSet.add(neighbor)
-        }
-      }
-    }
-
-    return Pair(lowestScore, paths)
-  }
-
   private fun getNeighbors(
-      memorySpace: MemorySpace,
-      bytes: CorruptedBytes = corruptedBytes
-  ): Sequence<MemorySpace> {
-    val byte = memorySpace.byte
+    byte: Byte,
+    bytes: CorruptedBytes = corruptedBytes,
+    previous: Byte? = null
+  ): List<Byte> {
     return Direction.entries
-        .asSequence()
-        .map { Point(byte).apply { move(it) } }
-        .filter { it.x in 0..size && it.y in 0..size }
-        .filterNot { it == memorySpace.previous?.byte }
-        .filterNot { bytes.contains(it) }
-        .map(::MemorySpace)
-  }
-
-  private fun calculateScoreForNeighbor(
-      neighbor: MemorySpace,
-      bytes: CorruptedBytes = corruptedBytes
-  ): Int =
-      when {
-        bytes.contains(neighbor.byte) -> DEAD_END_SCORE
-        else -> 1
-      }
-
-  private fun reconstructPath(memorySpace: MemorySpace): MemoryPath {
-    val path = mutableListOf<Byte>()
-    var current: MemorySpace? = memorySpace
-    while (current != null) {
-      path.add(current.byte)
-      current = current.previous
-    }
-    return path.reversed()
+      .map { Point(byte).apply { move(it) } }
+      .filter { it.x in 0..size && it.y in 0..size }
+      .filterNot { it == previous }
+      .filterNot { bytes.contains(it) }
   }
 }
