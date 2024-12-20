@@ -244,16 +244,5 @@ class Day13Test {
                 Arguments.of(3, 416082282239L),
             )
             .iterator()
-
-    @JvmStatic
-    fun getGcdData() =
-        listOf(
-                // a, b, c, x, y
-                Arguments.of(94, 22, 8400L, 80, 40),
-                Arguments.of(17, 84, 7870L, 38, 86),
-                Arguments.of(26, 67, 10000000012748L, 12, 34),
-                Arguments.of(69, 27, 10000000018641L, 12, 34),
-            )
-            .iterator()
   }
 }
