@@ -1,11 +1,10 @@
 import Day13.*
-import java.awt.Point
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
+import java.awt.Point
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class Day13Test {
 
@@ -167,12 +166,28 @@ class Day13Test {
   }
 
   @Test
-  fun `It should calculate cost for all prizes two`() = runBlocking {
+  fun `It should calculate cost for all prizes two`() {
     val expected = 875318608908L
     val input = testInput.costOfAllPrizesTwo()
 
     assertEquals(expected, input)
   }
+
+    @Test
+    fun `It should solve part one`() {
+        val expected = 27157L
+        val input = readInput("Day13").costOfAllPrizesOne()
+
+        assertEquals(expected, input)
+    }
+
+    @Test
+    fun `It should solve part two`() {
+        val expected = 104015411578548L
+        val input = readInput("Day13").costOfAllPrizesTwo()
+
+        assertEquals(expected, input)
+    }
 
   companion object {
     val testInput =
@@ -227,17 +242,6 @@ class Day13Test {
                 Arguments.of(1, 459236326669L),
                 Arguments.of(2, null),
                 Arguments.of(3, 416082282239L),
-            )
-            .iterator()
-
-    @JvmStatic
-    fun getGcdData() =
-        listOf(
-                // a, b, c, x, y
-                Arguments.of(94, 22, 8400L, 80, 40),
-                Arguments.of(17, 84, 7870L, 38, 86),
-                Arguments.of(26, 67, 10000000012748L, 12, 34),
-                Arguments.of(69, 27, 10000000018641L, 12, 34),
             )
             .iterator()
   }

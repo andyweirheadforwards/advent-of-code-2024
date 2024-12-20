@@ -1,4 +1,5 @@
 import java.awt.Point
+import java.util.PriorityQueue
 import kotlin.io.path.Path
 import kotlin.io.path.readText
 
@@ -81,12 +82,7 @@ fun Point.move(direction: Direction): Unit =
     }
 
 val Point.coordinates: String
-  get() = "$x,$y)"
-
-fun clearScreen() {
-  System.out.print("\\033[H\\033[2J")
-  System.out.flush()
-}
+  get() = "$x,$y"
 
 enum class Direction {
   NORTH,
@@ -120,4 +116,41 @@ enum class OrdinalDirection {
   SOUTHWEST,
   WEST,
   NORTHWEST
+}
+
+fun <T> dijkstra(
+    start: T,
+    end: T,
+    findNeighbours: (T) -> List<T>
+): List<T>? {
+    val distances = mutableMapOf<T, Int>().withDefault { Int.MAX_VALUE }
+    val previousNodes = mutableMapOf<T, T?>()
+    val priorityQueue = PriorityQueue(compareBy<Pair<T, Int>> { it.second })
+
+    distances[start] = 0
+    priorityQueue.add(start to 0)
+
+    while (priorityQueue.isNotEmpty()) {
+        val (current, currentDistance) = priorityQueue.poll()
+
+        if (current == end) {
+            val path = mutableListOf<T>()
+            var node: T? = end
+            while (node != null) {
+                path.add(0, node)
+                node = previousNodes[node]
+            }
+            return path
+        }
+
+        for (neighbor in findNeighbours(current)) {
+            val newDistance = currentDistance + 1
+            if (newDistance < distances.getValue(neighbor)) {
+                distances[neighbor] = newDistance
+                previousNodes[neighbor] = current
+                priorityQueue.add(neighbor to newDistance)
+            }
+        }
+    }
+    return null
 }

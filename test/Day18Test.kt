@@ -37,6 +37,26 @@ class Day18Test {
     assertEquals(Point(6, 1).toString(), byte.toString())
   }
 
+  @Test
+  fun `It should solve part one`() {
+    val input = readInput("Day18")
+
+    val ram = Ram(input)
+    val (steps) = ram.solve(1024)
+
+    assertEquals(374, steps)
+  }
+
+  @Test
+  fun `It should solve part two`() {
+    val input = readInput("Day18")
+
+    val ram = Ram(input)
+    val byte = ram.solveLastByte()
+
+    assertEquals("30,12", byte.coordinates)
+  }
+
   companion object {
     val testInput =
         """
