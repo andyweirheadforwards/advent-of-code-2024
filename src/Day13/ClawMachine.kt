@@ -49,8 +49,8 @@ data class ClawMachine(val buttonA: Button, val buttonB: Button, val prizeLocati
 
   override fun toString(): String =
       """
-        Day13.Button A: X+${buttonA.x}, Y+${buttonA.y}
-        Day13.Button B: X+${buttonB.x}, Y+${buttonB.y}
+        Button A: X+${buttonA.x}, Y+${buttonA.y}
+        Button B: X+${buttonB.x}, Y+${buttonB.y}
         Prize: X=${prizeLocation.x}, Y=${prizeLocation.y}
       """
           .trimIndent()
