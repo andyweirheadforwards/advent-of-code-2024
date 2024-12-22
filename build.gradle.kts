@@ -16,6 +16,7 @@ dependencies {
     testImplementation(kotlin("test"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:null")
+    implementation("com.github.ben-manes.caffeine:caffeine:3.0.5")
 }
 
 sourceSets {
