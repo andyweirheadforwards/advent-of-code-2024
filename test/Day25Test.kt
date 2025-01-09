@@ -1,7 +1,3 @@
-import day25.Key
-import day25.Lock
-import day25.Puzzle
-import day25.fitsIn
 import day25.isKey
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.params.ParameterizedTest

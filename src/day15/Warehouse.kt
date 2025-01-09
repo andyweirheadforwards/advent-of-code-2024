@@ -6,7 +6,6 @@ import utils.getSymbolAt
 import utils.setSymbolAt
 import utils.string
 import java.awt.Point
-import kotlin.collections.take
 
 open class Warehouse
     internal constructor(
