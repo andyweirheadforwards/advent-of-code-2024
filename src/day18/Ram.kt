@@ -1,7 +1,9 @@
 package day18
 
+import utils.Direction
 import utils.Grid
 import utils.dijkstra
+import utils.move
 import utils.string
 import java.awt.Point
 

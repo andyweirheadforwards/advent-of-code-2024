@@ -1,14 +1,14 @@
-import aoc.day13.BUTTON_COST_A
-import aoc.day13.BUTTON_COST_B
-import aoc.day13.Button
-import aoc.day13.ClawMachine
-import aoc.day13.LongPoint
-import aoc.day13.costOfAllPrizesOne
-import aoc.day13.costOfAllPrizesTwo
-import aoc.day13.toClawMachineOne
-import aoc.day13.toClawMachineTwo
-import aoc.day13.toLongPoint
-import aoc.day13.toRawMachineLinesList
+import day13.BUTTON_COST_A
+import day13.BUTTON_COST_B
+import day13.Button
+import day13.ClawMachine
+import day13.LongPoint
+import day13.costOfAllPrizesOne
+import day13.costOfAllPrizesTwo
+import day13.toClawMachineOne
+import day13.toClawMachineTwo
+import day13.toLongPoint
+import day13.toRawMachineLinesList
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
@@ -188,7 +188,7 @@ class Day13Test {
     @Test
     fun `It should solve part one`() {
         val expected = 27157L
-        val input = readInput("aoc/day13").costOfAllPrizesOne()
+        val input = readInput("Day13").costOfAllPrizesOne()
 
         assertEquals(expected, input)
     }
@@ -196,7 +196,7 @@ class Day13Test {
     @Test
     fun `It should solve part two`() {
         val expected = 104015411578548L
-        val input = readInput("aoc/day13").costOfAllPrizesTwo()
+        val input = readInput("Day13").costOfAllPrizesTwo()
 
         assertEquals(expected, input)
     }

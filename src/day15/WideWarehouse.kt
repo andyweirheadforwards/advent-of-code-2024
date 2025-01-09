@@ -3,6 +3,7 @@ package day15
 import utils.Direction
 import utils.Grid
 import utils.getSymbolAt
+import utils.move
 import utils.setSymbolAt
 import java.awt.Point
 

@@ -1,8 +1,10 @@
 package day15
 
 import copy
+import utils.Direction
 import utils.Grid
 import utils.getSymbolAt
+import utils.move
 import utils.setSymbolAt
 import utils.string
 import java.awt.Point

@@ -1,6 +1,7 @@
 package day21
 
 import utils.Coordinate
+import utils.Direction
 import utils.Grid
 import utils.dijkstra
 import utils.getNeighbours

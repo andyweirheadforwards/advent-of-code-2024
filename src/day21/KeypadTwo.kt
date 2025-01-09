@@ -8,6 +8,7 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.runBlocking
 import utils.Coordinate
 import utils.Dijkstra
+import utils.Direction
 import utils.Grid
 import utils.getNeighbours
 import utils.getSymbolAt

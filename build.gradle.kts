@@ -98,31 +98,6 @@ detekt {
     basePath = projectDir.absolutePath
 }
 
-tasks.named("detekt").configure {
-    reports {
-        // Enable/Disable XML report (default: true)
-        xml.required.set(true)
-        xml.outputLocation.set(file("build/reports/detekt.xml"))
-        // Enable/Disable HTML report (default: true)
-        html.required.set(true)
-        html.outputLocation.set(file("build/reports/detekt.html"))
-        // Enable/Disable TXT report (default: true)
-        txt.required.set(true)
-        txt.outputLocation.set(file("build/reports/detekt.txt"))
-        // Enable/Disable SARIF report (default: false)
-        sarif.required.set(true)
-        sarif.outputLocation.set(file("build/reports/detekt.sarif"))
-        // Enable/Disable MD report (default: false)
-        md.required.set(true)
-        md.outputLocation.set(file("build/reports/detekt.md"))
-        custom {
-            // The simple class name of your custom report.
-            reportId = "CustomJsonReport"
-            outputLocation.set(file("build/reports/detekt.json"))
-        }
-    }
-}
-
 sonar {
     properties {
         property("sonar.projectKey", "andyweirheadforwards_advent-of-code-2024")

@@ -1,8 +1,8 @@
-import aoc.day19.Design
-import aoc.day19.canReconstruct
-import aoc.day19.canReconstructWays
-import aoc.day19.designs
-import aoc.day19.towels
+import day19.Design
+import day19.canReconstruct
+import day19.canReconstructWays
+import day19.designs
+import day19.towels
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
@@ -50,7 +50,7 @@ class Day19Test {
 
     @Test
     fun `It should have correct count of designs`() {
-        val input = readInput("aoc/day19")
+        val input = readInput("Day19")
 
         val towels = input.towels
         val designs = input.designs

@@ -1,7 +1,7 @@
-import aoc.day15.Warehouse
-import aoc.day15.Warehouse.Companion.ROBOT
-import aoc.day15.Warehouse.Companion.SPACE
-import aoc.day15.WideWarehouse
+import day15.Warehouse
+import day15.Warehouse.Companion.ROBOT
+import day15.Warehouse.Companion.SPACE
+import day15.WideWarehouse
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource

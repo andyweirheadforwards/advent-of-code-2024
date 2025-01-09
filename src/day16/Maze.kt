@@ -1,12 +1,14 @@
 package day16
 
 import utils.Dijkstra
+import utils.Direction
 import utils.Grid
 import utils.GridString
 import utils.findFirst
 import utils.getSymbolAt
 import utils.grid
 import utils.isValidPoint
+import utils.move
 import utils.string
 import java.awt.Point
 
