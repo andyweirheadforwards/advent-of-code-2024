@@ -1,5 +1,14 @@
 plugins {
     kotlin("jvm") version "2.1.0"
+    id("org.sonarqube") version "6.0.1.5171"
+}
+
+sonar {
+    properties {
+        property("sonar.projectKey", "andyweirheadforwards_advent-of-code-2024")
+        property("sonar.organization", "andyweirheadforwards")
+        property("sonar.host.url", "https://sonarcloud.io")
+    }
 }
 
 kotlin {
