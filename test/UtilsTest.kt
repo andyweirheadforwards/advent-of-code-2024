@@ -1,15 +1,14 @@
-import Utils.Grid
-import Utils.findAll
-import Utils.findFirst
-import Utils.grid
-import Utils.readInput
-import Utils.setSymbolAt
-import Utils.string
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
+import utils.Grid
+import utils.findAll
+import utils.findFirst
+import utils.grid
+import utils.readInput
+import utils.setSymbolAt
+import utils.string
 import java.awt.Point
-import kotlin.collections.map
 
 class UtilsTest {
     @Test

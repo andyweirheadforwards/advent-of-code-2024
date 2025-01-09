@@ -1,5 +1,5 @@
-import Utils.PROFILE_REPEAT
-import Utils.readInput
+import utils.PROFILE_REPEAT
+import utils.readInput
 import kotlin.time.measureTime
 
 fun main() {

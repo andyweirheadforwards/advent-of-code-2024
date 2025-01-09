@@ -1,8 +1,8 @@
-import Day24.MonitoringDevice
-import Utils.readInput
+import aoc.day24.MonitoringDevice
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
+import utils.readInput
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -50,7 +50,7 @@ class Day24Test {
     @Test
     fun `It should solve part one`() {
         val expected = 51410244478064L
-        val input = readInput("Day24")
+        val input = readInput("aoc/day24")
         val monitoringDevice = MonitoringDevice(input)
 
         assertEquals(expected, monitoringDevice.getOutputDecimal())
@@ -207,7 +207,7 @@ class Day24Test {
                 Arguments.of(testInput, "01101", "11111", "101100"), // test input
                 Arguments.of(invalidGatesInput, "101010", "101100", "1010110"), // invalid gates input
                 Arguments.of(
-                    readInput("Day24"),
+                    readInput("aoc/day24"),
                     "110001011010001110001010000101001110001111001".reversed(),
                     "101100110111101001010111011011010001111101011".reversed(),
                     "1011101011111111011111001111000010010001110000",

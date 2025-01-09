@@ -1,10 +1,10 @@
-import Day21.KeypadTwo
-import Day21.Puzzle
-import Utils.readInput
+import day21.KeypadTwo
+import day21.Puzzle
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
+import utils.readInput
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -137,7 +137,7 @@ class Day21Test {
     fun `It should solve part one`() {
         val expected = 215374
         val puzzle = Puzzle()
-        val input = readInput("Day21")
+        val input = readInput("day21")
 
         assertEquals(expected, puzzle.solveOne(input))
     }

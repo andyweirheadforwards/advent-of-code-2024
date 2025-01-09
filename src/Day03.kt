@@ -1,4 +1,4 @@
-import Utils.readInput
+import utils.readInput
 
 private const val DISABLED = "don't()"
 private const val ENABLED = "do()"

@@ -1,7 +1,9 @@
-import Utils.dijkstra
-import Utils.dijkstraAll
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import utils.dijkstra
+import utils.dijkstraAll
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
 class DijkstraTest {
     @Test

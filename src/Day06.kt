@@ -1,14 +1,14 @@
 import GuardDirection.entries
-import Utils.Grid
-import Utils.GridString
-import Utils.PROFILE_REPEAT
-import Utils.getSymbolAt
-import Utils.readInput
-import Utils.setSymbolAt
-import Utils.string
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
+import utils.Grid
+import utils.GridString
+import utils.PROFILE_REPEAT
+import utils.getSymbolAt
+import utils.readInput
+import utils.setSymbolAt
+import utils.string
 import java.awt.Point
 import kotlin.time.measureTime
 

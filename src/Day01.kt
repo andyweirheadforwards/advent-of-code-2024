@@ -1,4 +1,4 @@
-import Utils.readInput
+import utils.readInput
 import kotlin.math.abs
 
 fun main() {

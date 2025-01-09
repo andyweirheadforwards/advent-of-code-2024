@@ -1,10 +1,12 @@
-import Utils.GridString
-import Utils.OrdinalDirection
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
+import utils.GridString
+import utils.OrdinalDirection
 
 class Day04Test {
     @ParameterizedTest(name = "It should find {2} instances of WORD facing {1}")
@@ -145,10 +147,7 @@ class Day04Test {
 
     @ParameterizedTest(name = "{0} rotated {1} times should match X_MAS")
     @MethodSource("getXMas")
-    fun `It should match X_MAS rotated`(
-        grid: GridString,
-        rotated: Int,
-    ) {
+    fun `It should match X_MAS rotated`(grid: GridString) {
         assertTrue(grid.matchesXMas())
     }
 

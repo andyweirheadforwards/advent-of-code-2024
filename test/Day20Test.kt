@@ -1,8 +1,8 @@
-import Day20.Race
-import Utils.readInput
+import day20.Race
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
+import utils.readInput
 import java.awt.Point
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -112,7 +112,7 @@ class Day20Test {
     @Test
     fun `It should solve part one`() {
         val expected = 1409
-        val input = readInput("Day20")
+        val input = readInput("day20")
         val race = Race(input)
         val solutionOne = race.solveOne()
 
@@ -133,7 +133,7 @@ class Day20Test {
     @Test
     fun `It should solve part two`() {
         val expected = 1012821
-        val input = readInput("Day20")
+        val input = readInput("day20")
         val race = Race(input)
         val solutionOne = race.solveTwo()
 

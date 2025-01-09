@@ -1,12 +1,14 @@
-import Utils.getSymbolAt
-import Utils.setSymbolAt
-import Utils.string
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
+import utils.getSymbolAt
+import utils.setSymbolAt
+import utils.string
 import java.awt.Point
+import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
 class Day06Test {

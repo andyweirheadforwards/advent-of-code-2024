@@ -1,5 +1,5 @@
-import Utils.readInput
-import java.util.*
+import utils.readInput
+import java.util.Collections
 
 fun main() {
     val input = readInput("Day05")

@@ -1,7 +1,7 @@
-import Day18.Byte
-import Day18.Ram
-import Utils.coordinates
-import Utils.readInput
+import day18.Byte
+import day18.Ram
+import utils.coordinates
+import utils.readInput
 import java.awt.Point
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -41,7 +41,7 @@ class Day18Test {
 
     @Test
     fun `It should solve part one`() {
-        val input = readInput("Day18")
+        val input = readInput("day18")
 
         val ram = Ram(input)
         val (steps) = ram.solve(1024)
@@ -51,7 +51,7 @@ class Day18Test {
 
     @Test
     fun `It should solve part two`() {
-        val input = readInput("Day18")
+        val input = readInput("day18")
 
         val ram = Ram(input)
         val byte = ram.solveLastByte()

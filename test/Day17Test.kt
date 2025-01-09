@@ -1,7 +1,7 @@
-import Day17.Computer
-import Day17.REGISTER_A
-import Day17.REGISTER_B
-import Day17.REGISTER_C
+import day17.Computer
+import day17.REGISTER_A
+import day17.REGISTER_B
+import day17.REGISTER_C
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 

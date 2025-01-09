@@ -1,6 +1,6 @@
-import Utils.GridString
-import Utils.OrdinalDirection
-import Utils.readInput
+import utils.GridString
+import utils.OrdinalDirection
+import utils.readInput
 
 const val WORD = "XMAS"
 const val X_MAS = "M S\n A \nM S"

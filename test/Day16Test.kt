@@ -1,5 +1,5 @@
-import Day16.Maze
-import Day16.countTilesOnBestPath
+import day16.Maze
+import day16.countTilesOnBestPath
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest

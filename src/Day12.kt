@@ -1,9 +1,9 @@
-import Utils.Grid
-import Utils.PROFILE_REPEAT
-import Utils.getNeighbours
-import Utils.getSymbolAt
-import Utils.grid
-import Utils.readInput
+import utils.Grid
+import utils.PROFILE_REPEAT
+import utils.getNeighbours
+import utils.getSymbolAt
+import utils.grid
+import utils.readInput
 import java.awt.Point
 import kotlin.time.measureTime
 
@@ -64,6 +64,7 @@ data class Region(
                                     points.firstOrNull {
                                         it.toString() == Point(point.x, point.y - 1).toString()
                                     } != null -> 'O'
+
                                     else -> 'X'
                                 }
                             }.joinToString("")
