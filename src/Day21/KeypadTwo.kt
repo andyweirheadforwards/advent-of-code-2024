@@ -1,15 +1,8 @@
 package Day21
 
-import Coordinate
-import Direction
-import Grid
+import Utils.*
 import com.github.benmanes.caffeine.cache.Caffeine
-import dijkstraAll
-import getNeighbours
-import getSymbolAt
-import grid
 import kotlinx.coroutines.*
-import move
 import java.util.*
 import java.util.Queue
 import java.util.concurrent.TimeUnit
@@ -90,9 +83,9 @@ class KeypadTwo {
                 routes.add(listOf("A"))
             } else {
                 val paths = pathCache.get(from to to) {
-                    dijkstraAll(keyLocations[from]!!, keyLocations[to]!!) { current ->
+                    Dijkstra<Coordinate>(keyLocations[from]!!, keyLocations[to]!!, true, { current: Coordinate ->
                         grid.getNeighbours(current).filter { grid.getSymbolAt(it) != BLANK_KEY }
-                    }
+                    }).findPaths()
                 }
 
                 if (paths.isEmpty()) error("No route found")

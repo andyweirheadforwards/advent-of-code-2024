@@ -1,6 +1,6 @@
 package Day25
 
-import grid
+import Utils.grid
 
 data class Key(val bit: List<Int>) {
     companion object {

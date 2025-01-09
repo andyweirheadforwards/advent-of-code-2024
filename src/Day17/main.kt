@@ -1,7 +1,7 @@
 package Day17
 
-import PROFILE_REPEAT
-import readInput
+import Utils.PROFILE_REPEAT
+import Utils.readInput
 import kotlin.time.measureTime
 
 fun main() {
@@ -11,7 +11,7 @@ fun main() {
           val computer = Computer(input)
           val output = computer.output
           println(
-              "What do you get if you use commas to join the values it output into a single string?                         $output")
+              "What do you get if you use commas to join the values it output into a single Utils.string?                         $output")
 
           val solution = computer.searchForA()
           println(

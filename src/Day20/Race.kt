@@ -1,11 +1,11 @@
 package Day20
 
-import Grid
-import findFirst
-import getNeighbours
-import getSymbolAt
-import grid
-import string
+import Utils.Grid
+import Utils.findFirst
+import Utils.getNeighbours
+import Utils.getSymbolAt
+import Utils.grid
+import Utils.string
 import java.awt.Point
 import kotlin.math.abs
 

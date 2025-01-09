@@ -1,10 +1,10 @@
 package Day18
 
-import Direction
-import Grid
-import dijkstra
-import move
-import string
+import Utils.Direction
+import Utils.Grid
+import Utils.dijkstra
+import Utils.move
+import Utils.string
 import java.awt.Point
 
 typealias Byte = Point

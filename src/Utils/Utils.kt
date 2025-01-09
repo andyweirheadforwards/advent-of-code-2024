@@ -1,5 +1,9 @@
+package Utils
+
+import GUARD_LOCATION
+import lastIndexX
+import lastIndexY
 import java.awt.Point
-import java.util.*
 import kotlin.io.path.Path
 import kotlin.io.path.readText
 
@@ -121,111 +125,17 @@ enum class OrdinalDirection {
   NORTHWEST
 }
 
-//fun <T> dijkstra(
-//    start: T,
-//    end: T,
-//    findNeighbours: (T) -> List<T>
-//): List<T>? {
-//    val distances = mutableMapOf<T, Int>().withDefault { Int.MAX_VALUE }
-//    val previousNodes = mutableMapOf<T, T?>()
-//    val priorityQueue = PriorityQueue(compareBy<Pair<T, Int>> { it.second })
-//
-//    distances[start] = 0
-//    priorityQueue.add(start to 0)
-//
-//    while (priorityQueue.isNotEmpty()) {
-//        val (current, currentDistance) = priorityQueue.poll()
-//
-//        if (current == end) {
-//            val path = mutableListOf<T>()
-//            var node: T? = end
-//            while (node != null) {
-//                path.add(0, node)
-//                node = previousNodes[node]
-//            }
-//            return path
-//        }
-//
-//        for (neighbor in findNeighbours(current)) {
-//            val newDistance = currentDistance + 1
-//            if (newDistance < distances.getValue(neighbor)) {
-//                distances[neighbor] = newDistance
-//                previousNodes[neighbor] = current
-//                priorityQueue.add(neighbor to newDistance)
-//            }
-//        }
-//    }
-//    return null
-//}
-
 fun <T> dijkstra(
     start: T,
     end: T,
     findNeighbours: (T) -> List<T>,
-): List<T>? = dijkstra(start, end, false, findNeighbours).firstOrNull()
+): List<T>? = Dijkstra(start, end, false, findNeighbours).findPaths().firstOrNull()
 
 fun <T> dijkstraAll(
     start: T,
     end: T,
     findNeighbours: (T) -> List<T>,
-): List<List<T>> = dijkstra(start, end, true, findNeighbours)
-
-fun <T> dijkstra(
-    start: T,
-    end: T,
-    returnAll: Boolean,
-    findNeighbours: (T) -> List<T>,
-): List<List<T>> {
-    val distances = mutableMapOf<T, Int>().withDefault { Int.MAX_VALUE }
-    val previousNodes = mutableMapOf<T, MutableList<T>>()
-    val priorityQueue = PriorityQueue(compareBy<Pair<T, Int>> { it.second })
-
-    distances[start] = 0
-    priorityQueue.add(start to 0)
-
-    while (priorityQueue.isNotEmpty()) {
-        val (current, currentDistance) = priorityQueue.poll()
-
-        if (current == end) {
-            if (!returnAll) {
-                val path = mutableListOf<T>()
-                var node: T? = end
-                while (node != null) {
-                    path.add(0, node)
-                    node = previousNodes[node]?.firstOrNull()
-                }
-                return listOf(path)
-            } else {
-                val paths = mutableListOf<List<T>>()
-                val stack = mutableListOf(listOf(end))
-                while (stack.isNotEmpty()) {
-                    val path = stack.removeAt(stack.lastIndex)
-                    val lastNode = path.first()
-                    if (lastNode == start) {
-                        paths.add(path)
-                    } else {
-                        previousNodes[lastNode]?.forEach { prev ->
-                            stack.add(listOf(prev) + path)
-                        }
-                    }
-                }
-                return paths
-            }
-        }
-
-        for (neighbor in findNeighbours(current)) {
-            val newDistance = currentDistance + 1
-            if (newDistance < distances.getValue(neighbor)) {
-                distances[neighbor] = newDistance
-                previousNodes[neighbor] = mutableListOf(current)
-                priorityQueue.add(neighbor to newDistance)
-            } else if (newDistance == distances.getValue(neighbor)) {
-                previousNodes[neighbor]?.add(current)
-            }
-        }
-    }
-    return emptyList()
-}
+): List<List<T>> = Dijkstra(start, end, true, findNeighbours).findPaths()
 
 fun Point.toCoordinate(): Coordinate = Coordinate(x, y)
 

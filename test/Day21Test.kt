@@ -1,5 +1,6 @@
 import Day21.KeypadTwo
 import Day21.Puzzle
+import Utils.readInput
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments

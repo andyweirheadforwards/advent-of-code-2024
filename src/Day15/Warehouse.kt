@@ -1,12 +1,12 @@
 package Day15
 
-import Direction
-import Grid
+import Utils.Direction
+import Utils.Grid
+import Utils.getSymbolAt
+import Utils.move
+import Utils.setSymbolAt
+import Utils.string
 import copy
-import getSymbolAt
-import move
-import setSymbolAt
-import string
 import java.awt.Point
 
 open class Warehouse
@@ -83,7 +83,7 @@ internal constructor(val grid: Grid, val directions: List<Direction>, robot: Poi
       directions.take(number).forEach { direction ->
         val symbol = grid.getSymbolAt(robot, direction)
         when {
-          isWall(symbol) -> {}
+          isWall(symbol) -> Unit
           isSpace(symbol) -> robot.move(direction)
           isBox(symbol) -> {
             val box = Point(robot)
@@ -114,7 +114,7 @@ internal constructor(val grid: Grid, val directions: List<Direction>, robot: Poi
         if (canPush) grid.setSymbolAt(to, grid.getSymbolAt(from))
         canPush
       }
-      else -> error("Invalid box move $direction")
+      else -> error("Invalid box Utils.move $direction")
     }
   }
 

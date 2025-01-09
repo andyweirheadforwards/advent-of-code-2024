@@ -1,6 +1,6 @@
 package Day16
 
-import Direction
+import Utils.Direction
 import java.awt.Point
 
 typealias MazeNodePair = Pair<Point, Direction>

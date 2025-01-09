@@ -1,13 +1,12 @@
 package Day21
 
-import Coordinate
-import Grid
-import diff
-import dijkstra
-import dijkstraAll
-import getNeighbours
-import getSymbolAt
-import grid
+import Utils.Coordinate
+import Utils.Direction
+import Utils.Grid
+import Utils.dijkstra
+import Utils.getNeighbours
+import Utils.getSymbolAt
+import Utils.grid
 
 const val NUMERIC_KEYPAD =
     """
@@ -88,7 +87,7 @@ class Keypad(private val grid: Grid) {
         while (iterator.hasNext()) {
             val to = iterator.next()
             route +=
-                if (true || isNumericKeypad) {
+                if (isNumericKeypad) {
                     findDirections(keyLocations[from]!!, keyLocations[to]!!) + KEYPAD_START
                 } else {
                     keyPressLookup[Pair(from, to)]!!
@@ -125,7 +124,7 @@ class Keypad(private val grid: Grid) {
                 next.x < current.x -> '<'
                 next.y > current.y -> 'v'
                 next.y < current.y -> '^'
-                else -> error("Invalid move")
+                else -> error("Invalid Utils.move")
             }
         }.joinToString("")
 

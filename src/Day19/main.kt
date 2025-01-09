@@ -1,7 +1,7 @@
 package Day19
 
-import PROFILE_REPEAT
-import readInput
+import Utils.PROFILE_REPEAT
+import Utils.readInput
 import kotlin.time.measureTime
 
 fun main() {

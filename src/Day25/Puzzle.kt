@@ -1,8 +1,8 @@
 package Day25
 
-import Grid
-import grid
-import string
+import Utils.Grid
+import Utils.grid
+import Utils.string
 
 class Puzzle(val locks: List<Lock>, val keys: List<Key>) {
     companion object {

@@ -1,3 +1,5 @@
+import Utils.readInput
+
 fun main() {
   val input: ReportListString = readInput("Day02")
 

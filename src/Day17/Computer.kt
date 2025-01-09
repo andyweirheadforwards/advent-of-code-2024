@@ -77,7 +77,7 @@ private constructor(
         Opcode.BXL -> bxlOp(operand)
         Opcode.BST -> bstOp(operand)
         Opcode.JNZ -> if (jnzOp(operand)) continue
-        Opcode.BXC -> bxcOp(operand)
+        Opcode.BXC -> bxcOp()
         Opcode.OUT -> output += outOp(operand)
         Opcode.BDV -> bdvOp(operand)
         Opcode.CDV -> cdvOp(operand)
@@ -124,7 +124,7 @@ private constructor(
     return isJnz
   }
 
-  private fun bxcOp(operand: Operand) {
+  private fun bxcOp() {
     registers[REGISTER_B] = registers[REGISTER_B]!!.xor(registers[REGISTER_C]!!)
   }
 

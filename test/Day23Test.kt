@@ -1,4 +1,5 @@
 import Day23.LanParty
+import Utils.readInput
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

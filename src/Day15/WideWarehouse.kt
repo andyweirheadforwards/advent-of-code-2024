@@ -1,10 +1,10 @@
 package Day15
 
-import Direction
-import Grid
-import getSymbolAt
-import move
-import setSymbolAt
+import Utils.Direction
+import Utils.Grid
+import Utils.getSymbolAt
+import Utils.move
+import Utils.setSymbolAt
 import java.awt.Point
 
 class WideWarehouse(grid: Grid, directions: List<Direction>, robot: Point) :

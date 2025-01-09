@@ -1,7 +1,7 @@
 package Day13
 
-import minus
-import plus
+import Utils.minus
+import Utils.plus
 import java.awt.Point
 
 data class Button(val point: Point, val cost: Int) {

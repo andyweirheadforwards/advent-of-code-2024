@@ -1,8 +1,8 @@
 package Day18
 
-import PROFILE_REPEAT
-import coordinates
-import readInput
+import Utils.PROFILE_REPEAT
+import Utils.coordinates
+import Utils.readInput
 import kotlin.time.measureTime
 
 fun main() {
@@ -17,7 +17,7 @@ fun main() {
 
           val byte = ram.solveLastByte()
           println(
-              "What are the coordinates of the first byte that will prevent the exit from being reachable from your starting position? ${byte.coordinates}")
+              "What are the Utils.coordinates of the first byte that will prevent the exit from being reachable from your starting position? ${byte.coordinates}")
         }
       }
       .let { println("\nAverage time taken: ${it / PROFILE_REPEAT}") }

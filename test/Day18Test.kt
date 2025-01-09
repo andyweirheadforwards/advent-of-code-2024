@@ -1,5 +1,7 @@
 import Day18.Byte
 import Day18.Ram
+import Utils.coordinates
+import Utils.readInput
 import java.awt.Point
 import kotlin.test.Test
 import kotlin.test.assertEquals

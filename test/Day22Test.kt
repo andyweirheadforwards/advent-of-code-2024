@@ -1,6 +1,7 @@
 import Day22.SecretGenerator
 import Day22.calculateSumOfSecrets
 import Day22.findHighestScoringSequence
+import Utils.readInput
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
@@ -56,7 +57,7 @@ class Day22Test {
             2024,
         )
 
-    val solution = calculateSumOfSecrets(secrets, 2000)
+    val solution = calculateSumOfSecrets(secrets)
 
     assertEquals(expected, solution)
   }
@@ -73,7 +74,7 @@ class Day22Test {
   fun `It should solve part one`() {
     val expected = 17724064040
     val input = readInput("Day22").lines().map { it.toInt() }
-    val solution = calculateSumOfSecrets(input, 2000)
+    val solution = calculateSumOfSecrets(input)
 
     assertEquals(expected, solution)
   }

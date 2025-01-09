@@ -1,6 +1,6 @@
 package Day25
 
-import grid
+import Utils.grid
 
 data class Lock(val pins: List<Int>) {
     companion object {

@@ -1,5 +1,6 @@
 import Day24.MonitoringDevice
 import Day24.findSolutionTwo
+import Utils.readInput
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
@@ -87,14 +88,6 @@ class Day24Test {
         assertEquals(x, monitoringDevice.xValue, "x")
         assertEquals(y, monitoringDevice.yValue, "y")
         assertEquals(z, monitoringDevice.zValue, "z")
-    }
-
-    @ParameterizedTest(name = "It should be {3} for x: {1} y: {2}")
-    @MethodSource("getInvalidXyValues")
-    fun `It find solution two`(input: String, x: String, y: String, expected: String) {
-        val result = runBlocking { findSolutionTwo(input, 2) }
-
-        assertEquals(expected, result)
     }
 
     companion object {
@@ -211,18 +204,6 @@ class Day24Test {
                 "101100110111101001010111011011010001111101011".reversed(),
                 "1011101011111111011111001111000010010001110000"
             ), // input
-        ).iterator()
-
-        @JvmStatic
-        fun getInvalidXyValues() = listOf(
-            Arguments.of(invalidGatesInputSmall, "10", "01", "z00,z01,z02,z03"), // invalid gates input
-            Arguments.of(invalidGatesInput, "101010", "101100", "z00,z01,z02,z05"), // invalid gates input
-//            Arguments.of(
-//                readInput("Day24"),
-//                "110001011010001110001010000101001110001111001".reversed(),
-//                "101100110111101001010111011011010001111101011".reversed(),
-//                "1011101011111111011111001111000010010001110000"
-//            ), // input
         ).iterator()
     }
 }

@@ -1,8 +1,8 @@
 package Day24
 
-import PROFILE_REPEAT
+import Utils.PROFILE_REPEAT
 import kotlinx.coroutines.*
-import readInput
+import Utils.readInput
 import kotlin.time.measureTime
 
 fun main() {
