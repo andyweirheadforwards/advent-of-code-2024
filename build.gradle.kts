@@ -51,5 +51,9 @@ sonar {
         property("sonar.projectKey", "andyweirheadforwards_advent-of-code-2024")
         property("sonar.organization", "andyweirheadforwards")
         property("sonar.host.url", "https://sonarcloud.io")
+        property("sonar.language", "kotlin")
+        property("sonar.sources", "src")
+        property("sonar.tests", "test")
+        property("sonar.qualitygate.wait", "true")
     }
 }
