@@ -6,8 +6,8 @@ data class MemorySpace(
     val byte: Point,
     var score: Int = Int.MAX_VALUE,
     var previous: MemorySpace? = null,
-    var path: MemoryPath = listOf()
+    var path: MemoryPath = listOf(),
 ) {
-  val x = byte.x
-  val y = byte.y
+    val x = byte.x
+    val y = byte.y
 }

@@ -59,8 +59,9 @@ private val keyPressLookup =
         Pair('>', '>') to "A",
     )
 
-class Keypad(private val grid: Grid) {
-
+class Keypad(
+    private val grid: Grid,
+) {
     companion object {
         operator fun invoke(input: String): Keypad = Keypad(input.trimIndent().grid)
     }
@@ -69,11 +70,15 @@ class Keypad(private val grid: Grid) {
 
     private val isNumericKeypad = grid.size == 4
 
-    fun findRoute(input: String, depth: Int = 1): String {
-        return findRouteRecursive(input, depth)
-    }
+    fun findRoute(
+        input: String,
+        depth: Int = 1,
+    ): String = findRouteRecursive(input, depth)
 
-    private fun findRouteRecursive(route: String, depth: Int): String {
+    private fun findRouteRecursive(
+        route: String,
+        depth: Int,
+    ): String {
         if (depth == 0) return route
 
         val newRoute = findRouteForCode(route)
@@ -111,22 +116,29 @@ class Keypad(private val grid: Grid) {
         return locations.toMap()
     }
 
-    private fun findDirections(from: Coordinate, to: Coordinate): String {
+    private fun findDirections(
+        from: Coordinate,
+        to: Coordinate,
+    ): String {
         if (from == to) return ""
 
-        val path = dijkstra(from, to) { current ->
-            grid.getNeighbours(current).filter { grid.getSymbolAt(it) != BLANK_KEY }
-        } ?: error("No route found")
+        val path =
+            dijkstra(from, to) { current ->
+                grid.getNeighbours(current).filter { grid.getSymbolAt(it) != BLANK_KEY }
+            } ?: error("No route found")
 
-        val directions = path.zipWithNext().map { (current, next) ->
-            when {
-                next.x > current.x -> '>'
-                next.x < current.x -> '<'
-                next.y > current.y -> 'v'
-                next.y < current.y -> '^'
-                else -> error("Invalid Utils.move")
-            }
-        }.joinToString("")
+        val directions =
+            path
+                .zipWithNext()
+                .map { (current, next) ->
+                    when {
+                        next.x > current.x -> '>'
+                        next.x < current.x -> '<'
+                        next.y > current.y -> 'v'
+                        next.y < current.y -> '^'
+                        else -> error("Invalid Utils.move")
+                    }
+                }.joinToString("")
 
         val leftRightMoves = directions.filter { it == '<' || it == '>' }
         val upDownMoves = directions.filter { it == '^' || it == 'v' }
@@ -139,4 +151,8 @@ class Keypad(private val grid: Grid) {
     }
 }
 
-private data class Move(val x: Int, val y: Int, val symbol: Char)
+private data class Move(
+    val x: Int,
+    val y: Int,
+    val symbol: Char,
+)

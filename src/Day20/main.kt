@@ -17,6 +17,5 @@ fun main() {
             val solutionTwo = race.solveTwo().count { it >= 100 }
             println("How many cheats would save you at least 100 picoseconds? $solutionTwo")
         }
-    }
-        .let { println("\nAverage time taken: ${it / PROFILE_REPEAT}") }
+    }.let { println("\nAverage time taken: ${it / PROFILE_REPEAT}") }
 }

@@ -2,12 +2,17 @@ package Day23
 
 private const val POSSIBLE_HISTORIAN = 't'
 
-class LanParty(val nodes: List<ComputerNode>) {
+class LanParty(
+    val nodes: List<ComputerNode>,
+) {
     companion object {
         operator fun invoke(input: String): LanParty {
             val nodes = mutableMapOf<NodeName, MutableSet<NodeName>>()
 
-            input.trim().lines().map { it.split("-") }
+            input
+                .trim()
+                .lines()
+                .map { it.split("-") }
                 .forEach { (one, two) ->
                     nodes.computeIfAbsent(one) { mutableSetOf() }.add(two)
                     nodes.computeIfAbsent(two) { mutableSetOf() }.add(one)
@@ -19,6 +24,7 @@ class LanParty(val nodes: List<ComputerNode>) {
     private val possibleHistorianNodes = nodes.filter { it.name.startsWith(POSSIBLE_HISTORIAN) }
 
     fun solvePartOne() = findNetworksOfThreeNodes().count()
+
     fun solvePartTwo() = findPassword()
 
     fun findNetworksOfThreeNodes(): List<List<String>> {
@@ -33,7 +39,8 @@ class LanParty(val nodes: List<ComputerNode>) {
             }
         }
 
-        return networks.map { it.toList() }
+        return networks
+            .map { it.toList() }
             .sortedBy { it.joinToString("") }
     }
 
@@ -46,14 +53,18 @@ class LanParty(val nodes: List<ComputerNode>) {
             }
         }
 
-        val result = lanParties.map { it.sorted() }.toSet()
-            .sortedBy { it.joinToString("") }
-            .sortedByDescending { it.size }
+        val result =
+            lanParties
+                .map { it.sorted() }
+                .toSet()
+                .sortedBy { it.joinToString("") }
+                .sortedByDescending { it.size }
 
         return result
     }
 
-    fun findPassword() = findNetworksOfInterconnectedNodes()
-        .first()
-        .joinToString(",")
+    fun findPassword() =
+        findNetworksOfInterconnectedNodes()
+            .first()
+            .joinToString(",")
 }

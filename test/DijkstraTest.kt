@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
 class DijkstraTest {
-
     @Test
     fun findShortestPath() {
         val findNeighbours: (Int) -> List<Int> = { node ->

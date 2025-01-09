@@ -2,7 +2,9 @@ package Day25
 
 import Utils.grid
 
-data class Key(val bit: List<Int>) {
+data class Key(
+    val bit: List<Int>,
+) {
     companion object {
         operator fun invoke(input: String): Key {
             val bit = mutableListOf<Int>(0, 0, 0, 0, 0)

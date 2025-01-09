@@ -12,8 +12,7 @@ data class MazeNode(
     var previous: MazeNode? = null,
     var path: List<Point> = listOf(),
 ) : Comparable<MazeNode> {
+    override fun compareTo(other: MazeNode): Int = score.compareTo(other.score)
 
-  override fun compareTo(other: MazeNode): Int = score.compareTo(other.score)
-
-  fun toPair(): MazeNodePair = Pair(Point(point), direction)
+    fun toPair(): MazeNodePair = Pair(Point(point), direction)
 }

@@ -12,7 +12,8 @@ class Day25Test {
     @Test
     fun `It should create a lock`() {
         val expected = "0,5,3,4,3"
-        val input = """
+        val input =
+            """
             #####
             .####
             .####
@@ -20,7 +21,7 @@ class Day25Test {
             .#.#.
             .#...
             .....
-        """.trimIndent()
+            """.trimIndent()
 
         val lock = Lock(input)
 
@@ -30,7 +31,8 @@ class Day25Test {
     @Test
     fun `It should create a key`() {
         val expected = "5,0,2,1,3"
-        val input = """
+        val input =
+            """
             .....
             #....
             #....
@@ -38,17 +40,17 @@ class Day25Test {
             #.#.#
             #.###
             #####
-        """.trimIndent()
+            """.trimIndent()
 
         val key = Key(input)
 
         assertEquals(expected, key.toString())
     }
 
-
     @Test
     fun `It should be a key`() {
-        val input = """
+        val input =
+            """
             .....
             #....
             #....
@@ -56,14 +58,15 @@ class Day25Test {
             #.#.#
             #.###
             #####
-        """.trimIndent().grid
+            """.trimIndent().grid
 
         assertTrue(input.isKey)
     }
 
     @Test
     fun `It should not be a key`() {
-        val input = """
+        val input =
+            """
             #####
             .####
             .####
@@ -71,14 +74,18 @@ class Day25Test {
             .#.#.
             .#...
             .....
-        """.trimIndent().grid
+            """.trimIndent().grid
 
         assertFalse(input.isKey)
     }
 
     @ParameterizedTest(name = "It key: {1} fits lock: {0} - {2}")
     @MethodSource("getKeyLockPairs")
-    fun `It should fit lock`(lock: Lock, key: Key, expected: Boolean) {
+    fun `It should fit lock`(
+        lock: Lock,
+        key: Key,
+        expected: Boolean,
+    ) {
         assertEquals(expected, key fitsIn lock)
     }
 
@@ -91,7 +98,8 @@ class Day25Test {
     }
 
     companion object {
-        val testInput = """
+        val testInput =
+            """
             #####
             .####
             .####
@@ -131,13 +139,14 @@ class Day25Test {
             #.#..
             #.#.#
             #####
-        """.trimIndent()
+            """.trimIndent()
 
         @JvmStatic
-        fun getKeyLockPairs() = listOf(
-            Arguments.of(
-                Lock(
-                    """
+        fun getKeyLockPairs() =
+            listOf(
+                Arguments.of(
+                    Lock(
+                        """
                         #####
                         .####
                         .####
@@ -145,10 +154,10 @@ class Day25Test {
                         .#.#.
                         .#...
                         .....
-                    """.trimIndent()
-                ),
-                Key(
-                    """
+                        """.trimIndent(),
+                    ),
+                    Key(
+                        """
                         .....
                         #....
                         #....
@@ -156,13 +165,13 @@ class Day25Test {
                         #.#.#
                         #.###
                         #####
-                    """.trimIndent()
+                        """.trimIndent(),
+                    ),
+                    true,
                 ),
-                true
-            ),
-            Arguments.of(
-                Lock(
-                    """
+                Arguments.of(
+                    Lock(
+                        """
                         #####
                         .####
                         .####
@@ -170,10 +179,10 @@ class Day25Test {
                         .#.#.
                         .#...
                         .....
-                    """.trimIndent()
-                ),
-                Key(
-                    """
+                        """.trimIndent(),
+                    ),
+                    Key(
+                        """
                         .....
                         .....
                         #....
@@ -181,13 +190,13 @@ class Day25Test {
                         #.#.#
                         #.###
                         #####
-                    """.trimIndent()
+                        """.trimIndent(),
+                    ),
+                    true,
                 ),
-                true
-            ),
-            Arguments.of(
-                Lock(
-                    """
+                Arguments.of(
+                    Lock(
+                        """
                         #####
                         .####
                         .####
@@ -195,10 +204,10 @@ class Day25Test {
                         .#.#.
                         .#...
                         .....
-                    """.trimIndent()
-                ),
-                Key(
-                    """
+                        """.trimIndent(),
+                    ),
+                    Key(
+                        """
                         .....
                         #....
                         #....
@@ -206,13 +215,13 @@ class Day25Test {
                         #.#.#
                         #.###
                         #####
-                    """.trimIndent()
+                        """.trimIndent(),
+                    ),
+                    false,
                 ),
-                false
-            ),
-            Arguments.of(
-                Lock(
-                    """
+                Arguments.of(
+                    Lock(
+                        """
                         #####
                         .####
                         .###.
@@ -220,10 +229,10 @@ class Day25Test {
                         .#.#.
                         .#...
                         .....
-                    """.trimIndent()
-                ),
-                Key(
-                    """
+                        """.trimIndent(),
+                    ),
+                    Key(
+                        """
                         .....
                         #....
                         #....
@@ -231,10 +240,10 @@ class Day25Test {
                         #.#.#
                         #.###
                         #####
-                    """.trimIndent()
+                        """.trimIndent(),
+                    ),
+                    false,
                 ),
-                false
-            ),
-        ).iterator()
+            ).iterator()
     }
 }

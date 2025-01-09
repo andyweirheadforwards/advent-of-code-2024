@@ -15,6 +15,5 @@ fun main() {
             val solutionTwo = lanParty.solvePartTwo()
             println("What is the password to get into the LAN party?                        $solutionTwo")
         }
-    }
-        .let { println("\nAverage time taken: ${it / PROFILE_REPEAT}") }
+    }.let { println("\nAverage time taken: ${it / PROFILE_REPEAT}") }
 }

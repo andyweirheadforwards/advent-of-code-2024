@@ -10,30 +10,49 @@ import java.util.concurrent.TimeUnit
 typealias KeyLocations = Map<Char, Coordinate>
 
 class KeypadTwo {
-
     private val numKeypad: Grid = NUMERIC_KEYPAD.trimIndent().grid
     private val dirKeypad: Grid = DIRECTIONAL_KEYPAD.trimIndent().grid
 
     private val numKeyLocations: KeyLocations = buildKeyLocations(numKeypad)
     private val dirKeyLocations: KeyLocations = buildKeyLocations(dirKeypad)
 
-    private val pathCache = Caffeine.newBuilder().maximumSize(1000).expireAfterAccess(10, TimeUnit.MINUTES)
-        .build<Pair<Char, Char>, List<List<Coordinate>>>()
+    private val pathCache =
+        Caffeine
+            .newBuilder()
+            .maximumSize(1000)
+            .expireAfterAccess(10, TimeUnit.MINUTES)
+            .build<Pair<Char, Char>, List<List<Coordinate>>>()
 
-    private val routeCache = Caffeine.newBuilder().maximumSize(1000).expireAfterAccess(10, TimeUnit.MINUTES)
-        .build<Pair<Char, Char>, List<String>>()
+    private val routeCache =
+        Caffeine
+            .newBuilder()
+            .maximumSize(1000)
+            .expireAfterAccess(10, TimeUnit.MINUTES)
+            .build<Pair<Char, Char>, List<String>>()
 
-    private val combinationCache = Caffeine.newBuilder().maximumSize(1000).expireAfterAccess(10, TimeUnit.MINUTES)
-        .build<List<List<String>>, Sequence<String>>()
+    private val combinationCache =
+        Caffeine
+            .newBuilder()
+            .maximumSize(1000)
+            .expireAfterAccess(10, TimeUnit.MINUTES)
+            .build<List<List<String>>, Sequence<String>>()
 
     fun findNumRoutes(input: String) = runBlocking { findAllShortestRoutes(input, numKeypad, numKeyLocations) }
-    fun findDirRoutes(input: String, depth: Int = 1) =
-        runBlocking { findAllShortestRoutes(input, dirKeypad, dirKeyLocations, depth) }
+
+    fun findDirRoutes(
+        input: String,
+        depth: Int = 1,
+    ) = runBlocking { findAllShortestRoutes(input, dirKeypad, dirKeyLocations, depth) }
 
     fun findNumKeys(input: String): String = findKeys(input, numKeypad, numKeyLocations)
+
     fun findDirKeys(input: String): String = findKeys(input, dirKeypad, dirKeyLocations)
 
-    private fun findKeys(input: String, keypad: Grid, keyLocations: KeyLocations): String {
+    private fun findKeys(
+        input: String,
+        keypad: Grid,
+        keyLocations: KeyLocations,
+    ): String {
         var keys = ""
         var position = keyLocations[KEYPAD_START]!!
         val iterator = input.iterator()
@@ -70,65 +89,71 @@ class KeypadTwo {
         grid: Grid,
         keyLocations: Map<Char, Coordinate>,
         depth: Int = 1,
-    ): Sequence<String> = coroutineScope {
-        if (input.isEmpty()) return@coroutineScope emptySequence()
-        if (depth > 25) error("Depth too large, may cause OutOfMemoryError")
+    ): Sequence<String> =
+        coroutineScope {
+            if (input.isEmpty()) return@coroutineScope emptySequence()
+            if (depth > 25) error("Depth too large, may cause OutOfMemoryError")
 
-        val routes = mutableListOf<List<String>>()
-        var from = KEYPAD_START
+            val routes = mutableListOf<List<String>>()
+            var from = KEYPAD_START
 
-        input.forEach { char ->
-            val to = char
-            if (to == from) {
-                routes.add(listOf("A"))
-            } else {
-                val paths = pathCache.get(from to to) {
-                    Dijkstra<Coordinate>(keyLocations[from]!!, keyLocations[to]!!, true, { current: Coordinate ->
-                        grid.getNeighbours(current).filter { grid.getSymbolAt(it) != BLANK_KEY }
-                    }).findPaths()
-                }
+            input.forEach { char ->
+                val to = char
+                if (to == from) {
+                    routes.add(listOf("A"))
+                } else {
+                    val paths =
+                        pathCache.get(from to to) {
+                            Dijkstra<Coordinate>(keyLocations[from]!!, keyLocations[to]!!, true, { current: Coordinate ->
+                                grid.getNeighbours(current).filter { grid.getSymbolAt(it) != BLANK_KEY }
+                            }).findPaths()
+                        }
 
-                if (paths.isEmpty()) error("No route found")
+                    if (paths.isEmpty()) error("No route found")
 
-                val directionsList = routeCache.get(from to to) {
-                    paths.map { path ->
-                        path.zipWithNext().map { (current, next) ->
-                            when {
-                                next.x > current.x -> '>'
-                                next.x < current.x -> '<'
-                                next.y > current.y -> 'v'
-                                next.y < current.y -> '^'
-                                else -> 'A'
+                    val directionsList =
+                        routeCache.get(from to to) {
+                            paths.map { path ->
+                                path
+                                    .zipWithNext()
+                                    .map { (current, next) ->
+                                        when {
+                                            next.x > current.x -> '>'
+                                            next.x < current.x -> '<'
+                                            next.y > current.y -> 'v'
+                                            next.y < current.y -> '^'
+                                            else -> 'A'
+                                        }
+                                    }.joinToString("") + KEYPAD_START
                             }
-                        }.joinToString("") + KEYPAD_START
-                    }
-                }
+                        }
 
-                routes.add(directionsList)
+                    routes.add(directionsList)
+                }
+                from = to
             }
-            from = to
+
+            val queue: Queue<Pair<Sequence<String>, Int>> = LinkedList()
+            queue.add(getAllCombinations(routes) to 1)
+
+            while (queue.isNotEmpty()) {
+                val (currentResult, currentDepth) = queue.poll()
+                if (currentDepth < depth) {
+                    val deferredResults: List<Deferred<Sequence<String>>> =
+                        currentResult.toList().map { route ->
+                            async { findAllShortestRoutes(route, grid, keyLocations, 1) }
+                        }
+                    queue.addAll(deferredResults.awaitAll().map { it to (currentDepth + 1) })
+                } else {
+                    return@coroutineScope currentResult
+                }
+            }
+
+            emptySequence()
         }
 
-        val queue: Queue<Pair<Sequence<String>, Int>> = LinkedList()
-        queue.add(getAllCombinations(routes) to 1)
-
-        while (queue.isNotEmpty()) {
-            val (currentResult, currentDepth) = queue.poll()
-            if (currentDepth < depth) {
-                val deferredResults: List<Deferred<Sequence<String>>> = currentResult.toList().map { route ->
-                    async { findAllShortestRoutes(route, grid, keyLocations, 1) }
-                }
-                queue.addAll(deferredResults.awaitAll().map { it to (currentDepth + 1) })
-            } else {
-                return@coroutineScope currentResult
-            }
-        }
-
-        emptySequence()
-    }
-
-    private fun getAllCombinations(routes: List<List<String>>): Sequence<String> {
-        return combinationCache.get(routes) {
+    private fun getAllCombinations(routes: List<List<String>>): Sequence<String> =
+        combinationCache.get(routes) {
             sequence {
                 val indices = IntArray(routes.size)
                 while (true) {
@@ -142,5 +167,4 @@ class KeypadTwo {
                 }
             }
         }
-    }
 }

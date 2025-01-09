@@ -9,7 +9,6 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class Day21Test {
-
     @Test
     fun `It should return key presses for numeric keypad`() {
         val expected = "029A"
@@ -49,7 +48,6 @@ class Day21Test {
             assertEquals(keyPresses, expected)
         }
     }
-
 
     @Test
     fun `It should map output to input - dir`() {
@@ -102,7 +100,6 @@ class Day21Test {
         assertEquals(expected.length, routes.minOf { it.length })
     }
 
-
     @Test
     fun `It should solve the puzzle - one`() {
         val expected = "<vA<AA>>^AvAA<^A>A<v<A>>^AvA^A<vA>^A<v<A>^A>AAvA^A<v<A>A>^AAAvA<^A>A"
@@ -115,7 +112,10 @@ class Day21Test {
 
     @ParameterizedTest(name = "It should find directions to key code {0}")
     @MethodSource("getKeyCodes")
-    fun `It should find directions to key codes`(keyCode: String, expected: String) {
+    fun `It should find directions to key codes`(
+        keyCode: String,
+        expected: String,
+    ) {
         val puzzle = Puzzle()
         val minLength = puzzle.findRoute(keyCode).minOf { it.length }
 
@@ -124,7 +124,11 @@ class Day21Test {
 
     @ParameterizedTest(name = "It should find complexity to key code {0}")
     @MethodSource("getKeyCodes")
-    fun `It should find solutions to key codes`(keyCode: String, directions: String, expected: Int) {
+    fun `It should find solutions to key codes`(
+        keyCode: String,
+        directions: String,
+        expected: Int,
+    ) {
         val puzzle = Puzzle()
         assertEquals(directions.length * expected, puzzle.findComplexity(keyCode))
     }
@@ -140,12 +144,13 @@ class Day21Test {
 
     companion object {
         @JvmStatic
-        fun getKeyCodes() = listOf(
-            Arguments.of("029A", "<vA<AA>>^AvAA<^A>A<v<A>>^AvA^A<vA>^A<v<A>^A>AAvA^A<v<A>A>^AAAvA<^A>A", 29),
-            Arguments.of("980A", "<v<A>>^AAAvA^A<vA<AA>>^AvAA<^A>A<v<A>A>^AAAvA<^A>A<vA>^A<A>A", 980),
-            Arguments.of("179A", "<v<A>>^A<vA<A>>^AAvAA<^A>A<v<A>>^AAvA^A<vA>^AA<A>A<v<A>A>^AAAvA<^A>A", 179),
-            Arguments.of("456A", "<v<A>>^AA<vA<A>>^AAvAA<^A>A<vA>^A<A>A<vA>^A<A>A<v<A>A>^AAvA<^A>A", 456),
-            Arguments.of("379A", "<v<A>>^AvA^A<vA<AA>>^AAvA<^A>AAvA^A<vA>^AA<A>A<v<A>A>^AAAvA<^A>A", 379),
-        ).iterator()
+        fun getKeyCodes() =
+            listOf(
+                Arguments.of("029A", "<vA<AA>>^AvAA<^A>A<v<A>>^AvA^A<vA>^A<v<A>^A>AAvA^A<v<A>A>^AAAvA<^A>A", 29),
+                Arguments.of("980A", "<v<A>>^AAAvA^A<vA<AA>>^AvAA<^A>A<v<A>A>^AAAvA<^A>A<vA>^A<A>A", 980),
+                Arguments.of("179A", "<v<A>>^A<vA<A>>^AAvAA<^A>A<v<A>>^AAvA^A<vA>^AA<A>A<v<A>A>^AAAvA<^A>A", 179),
+                Arguments.of("456A", "<v<A>>^AA<vA<A>>^AAvAA<^A>A<vA>^A<A>A<vA>^A<A>A<v<A>A>^AAvA<^A>A", 456),
+                Arguments.of("379A", "<v<A>>^AvA^A<vA<AA>>^AAvA<^A>AAvA^A<vA>^AA<A>A<v<A>A>^AAAvA<^A>A", 379),
+            ).iterator()
     }
 }

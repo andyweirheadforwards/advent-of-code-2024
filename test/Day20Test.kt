@@ -8,7 +8,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class Day20Test {
-
     @Test
     fun `It should load the input`() {
         val expected = smallTestInput
@@ -29,17 +28,18 @@ class Day20Test {
 
     @Test
     fun `It should find the race path`() {
-        val expected = listOf(
-            Point(1, 1),
-            Point(1, 2),
-            Point(2, 2),
-            Point(2, 3),
-            Point(3, 3),
-            Point(4, 3),
-            Point(4, 2),
-            Point(5, 2),
-            Point(5, 1),
-        )
+        val expected =
+            listOf(
+                Point(1, 1),
+                Point(1, 2),
+                Point(2, 2),
+                Point(2, 3),
+                Point(3, 3),
+                Point(4, 3),
+                Point(4, 2),
+                Point(5, 2),
+                Point(5, 1),
+            )
         val race = Race(smallTestInput)
 
         assertEquals(expected, race.path)
@@ -48,13 +48,14 @@ class Day20Test {
     @Test
     fun `It should find a shortcut - One`() {
         val expected = 7
-        val input = """
+        val input =
+            """
             #######
             #S###E#
             #..#..#
             ##...##
             #######
-        """.trimIndent()
+            """.trimIndent()
         val race = Race(input)
         val shortcuts = race.findShortcuts(2)
 
@@ -65,12 +66,13 @@ class Day20Test {
     @Test
     fun `It should find a shortcut - Two`() {
         val expected = 3
-        val input = """
+        val input =
+            """
             #####
             #S#E#
             #...#
             #####
-        """.trimIndent()
+            """.trimIndent()
         val race = Race(input)
         val shortcuts = race.findShortcuts(2)
 
@@ -81,13 +83,14 @@ class Day20Test {
     @Test
     fun `It should find a shortcut - Three`() {
         val expected = 8
-        val input = """
+        val input =
+            """
             ########
             #S####E#
             #..##..#
             ##....##
             ########
-        """.trimIndent()
+            """.trimIndent()
         val race = Race(input)
         val shortcuts = race.findShortcuts(3)
 
@@ -97,7 +100,10 @@ class Day20Test {
 
     @ParameterizedTest(name = "There are {1} cheats that save {0} picoseconds.")
     @MethodSource("getCheatsOne")
-    fun `It should find the shortcuts - one`(time: Int, expected: Int) {
+    fun `It should find the shortcuts - one`(
+        time: Int,
+        expected: Int,
+    ) {
         val race = Race(testInput)
         val result = race.solveOne()
         assertEquals(expected, result.count { it == time })
@@ -115,7 +121,10 @@ class Day20Test {
 
     @ParameterizedTest(name = "There are {1} cheats that save {0} picoseconds.")
     @MethodSource("getCheatsTwo")
-    fun `It should find the shortcuts - two`(time: Int, expected: Int) {
+    fun `It should find the shortcuts - two`(
+        time: Int,
+        expected: Int,
+    ) {
         val race = Race(testInput)
         val result = race.solveTwo()
         assertEquals(expected, result.count { it == time })
@@ -132,15 +141,17 @@ class Day20Test {
     }
 
     companion object {
-        val smallTestInput = """
+        val smallTestInput =
+            """
             #######
             #S###E#
             #..#..#
             ##...##
             #######
-        """.trimIndent()
+            """.trimIndent()
 
-        val testInput = """
+        val testInput =
+            """
             ###############
             #...#...#.....#
             #.#.#.#.#.###.#
@@ -156,41 +167,43 @@ class Day20Test {
             #.#.#.#.#.#.###
             #...#...#...###
             ###############
-        """.trimIndent()
+            """.trimIndent()
 
         @JvmStatic
-        fun getCheatsOne() = listOf(
-            // time, count
-            Arguments.of(2, 14),
-            Arguments.of(4, 14),
-            Arguments.of(6, 2),
-            Arguments.of(8, 4),
-            Arguments.of(10, 2),
-            Arguments.of(12, 3),
-            Arguments.of(20, 1),
-            Arguments.of(36, 1),
-            Arguments.of(38, 1),
-            Arguments.of(40, 1),
-            Arguments.of(64, 1),
-        ).iterator()
+        fun getCheatsOne() =
+            listOf(
+                // time, count
+                Arguments.of(2, 14),
+                Arguments.of(4, 14),
+                Arguments.of(6, 2),
+                Arguments.of(8, 4),
+                Arguments.of(10, 2),
+                Arguments.of(12, 3),
+                Arguments.of(20, 1),
+                Arguments.of(36, 1),
+                Arguments.of(38, 1),
+                Arguments.of(40, 1),
+                Arguments.of(64, 1),
+            ).iterator()
 
         @JvmStatic
-        fun getCheatsTwo() = listOf(
-            // time, count
-            Arguments.of(50, 32),
-            Arguments.of(52, 31),
-            Arguments.of(54, 29),
-            Arguments.of(56, 39),
-            Arguments.of(58, 25),
-            Arguments.of(60, 23),
-            Arguments.of(62, 20),
-            Arguments.of(64, 19),
-            Arguments.of(66, 12),
-            Arguments.of(68, 14),
-            Arguments.of(70, 12),
-            Arguments.of(72, 22),
-            Arguments.of(74, 4),
-            Arguments.of(76, 3),
-        ).iterator()
+        fun getCheatsTwo() =
+            listOf(
+                // time, count
+                Arguments.of(50, 32),
+                Arguments.of(52, 31),
+                Arguments.of(54, 29),
+                Arguments.of(56, 39),
+                Arguments.of(58, 25),
+                Arguments.of(60, 23),
+                Arguments.of(62, 20),
+                Arguments.of(64, 19),
+                Arguments.of(66, 12),
+                Arguments.of(68, 14),
+                Arguments.of(70, 12),
+                Arguments.of(72, 22),
+                Arguments.of(74, 4),
+                Arguments.of(76, 3),
+            ).iterator()
     }
 }

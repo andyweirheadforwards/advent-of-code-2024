@@ -14,6 +14,5 @@ fun main() {
 
             println("How many unique lock/key pairs fit together without overlapping in any column? $solutionOne")
         }
-    }
-        .let { println("\nAverage time taken: ${it / PROFILE_REPEAT}") }
+    }.let { println("\nAverage time taken: ${it / PROFILE_REPEAT}") }
 }

@@ -2,7 +2,9 @@ package Day25
 
 import Utils.grid
 
-data class Lock(val pins: List<Int>) {
+data class Lock(
+    val pins: List<Int>,
+) {
     companion object {
         operator fun invoke(input: String): Lock {
             val pins = mutableListOf(0, 0, 0, 0, 0)
@@ -11,7 +13,6 @@ data class Lock(val pins: List<Int>) {
             grid.drop(1).forEach { row ->
                 row.forEachIndexed { index, it ->
                     if (it == '#') pins[index]++
-
                 }
             }
             return Lock(pins)

@@ -4,7 +4,10 @@ import Utils.Grid
 import Utils.grid
 import Utils.string
 
-class Puzzle(val locks: List<Lock>, val keys: List<Key>) {
+class Puzzle(
+    val locks: List<Lock>,
+    val keys: List<Key>,
+) {
     companion object {
         operator fun invoke(input: String): Puzzle {
             val keys = mutableListOf<Key>()

@@ -13,8 +13,9 @@ private const val RACE_START = 'S'
 private const val RACE_FINISH = 'E'
 private const val RACE_WALL = '#'
 
-class Race(private val track: Grid) {
-
+class Race(
+    private val track: Grid,
+) {
     companion object {
         operator fun invoke(input: String): Race = Race(input.grid)
     }
@@ -38,19 +39,23 @@ class Race(private val track: Grid) {
 
     fun solveTwo() = findShortcuts(20).map { path.size - it }
 
-    fun findShortcuts(time: Int): List<Int> = path.indices.flatMap { scStartIndex ->
-        (scStartIndex + 2 until path.size).mapNotNull { scFinishIndex ->
-            val dist = manhattanDistance(path[scStartIndex], path[scFinishIndex])
-            if (dist in 2..time) {
-                val shortcut = scStartIndex + dist + path.size - scFinishIndex
-                if (shortcut < path.size) shortcut else null
-            } else null
+    fun findShortcuts(time: Int): List<Int> =
+        path.indices.flatMap { scStartIndex ->
+            (scStartIndex + 2 until path.size).mapNotNull { scFinishIndex ->
+                val dist = manhattanDistance(path[scStartIndex], path[scFinishIndex])
+                if (dist in 2..time) {
+                    val shortcut = scStartIndex + dist + path.size - scFinishIndex
+                    if (shortcut < path.size) shortcut else null
+                } else {
+                    null
+                }
+            }
         }
-    }
 
     override fun toString(): String = track.string
 
-    private fun manhattanDistance(p1: Point, p2: Point): Int {
-        return abs(p1.x - p2.x) + abs(p2.y - p1.y)
-    }
+    private fun manhattanDistance(
+        p1: Point,
+        p2: Point,
+    ): Int = abs(p1.x - p2.x) + abs(p2.y - p1.y)
 }

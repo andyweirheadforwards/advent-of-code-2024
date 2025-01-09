@@ -6,7 +6,8 @@ import kotlin.test.assertEquals
 class Day23Test {
     @Test
     fun `It should find networks of three computers`() {
-        val expected = """
+        val expected =
+            """
             co,de,ta
             co,ka,ta
             de,ka,ta
@@ -14,7 +15,7 @@ class Day23Test {
             tb,vc,wq
             tc,td,wh
             td,wh,yn
-        """.trimIndent()
+            """.trimIndent()
 
         val lanParty = LanParty(testInput)
 
@@ -59,7 +60,8 @@ class Day23Test {
     }
 
     companion object {
-        val testInput = """
+        val testInput =
+            """
             kh-tc
             qp-kh
             de-cg
@@ -92,6 +94,6 @@ class Day23Test {
             wh-qp
             tb-vc
             td-yn
-        """.trimIndent()
+            """.trimIndent()
     }
 }

@@ -1,16 +1,27 @@
 package Day24
 
-class MonitoringDevice(private val wires: Map<String, Wire>, private val gates: List<LogicGate>) {
+class MonitoringDevice(
+    private val wires: Map<String, Wire>,
+    private val gates: List<LogicGate>,
+) {
     companion object {
         operator fun invoke(input: String): MonitoringDevice = MonitoringDevice(input.getWires(), input.getLogicGates())
     }
 
-    val xValue: String = wires.filter { it.key.startsWith('x') }
-        .values.sortedByDescending { it.name }
-        .map { it.value }.joinToString("")
-    val yValue: String = wires.filter { it.key.startsWith('y') }
-        .values.sortedByDescending { it.name }
-        .map { it.value }.joinToString("")
+    val xValue: String =
+        wires
+            .filter { it.key.startsWith('x') }
+            .values
+            .sortedByDescending { it.name }
+            .map { it.value }
+            .joinToString("")
+    val yValue: String =
+        wires
+            .filter { it.key.startsWith('y') }
+            .values
+            .sortedByDescending { it.name }
+            .map { it.value }
+            .joinToString("")
 
     val zValue: String = (xValue.toLong(2) + yValue.toLong(2)).toString(2).padStart(xValue.length + 1, '0')
 
@@ -36,7 +47,9 @@ class MonitoringDevice(private val wires: Map<String, Wire>, private val gates: 
             queue.remove(next)
         }
 
-        return wiresCopy.filter { it.key.startsWith('z') }.values
+        return wiresCopy
+            .filter { it.key.startsWith('z') }
+            .values
             .sortedByDescending { it.name }
             .joinToString("") { "${it.value}" }
             .padStart(xValue.length + 1, '0')
@@ -44,6 +57,5 @@ class MonitoringDevice(private val wires: Map<String, Wire>, private val gates: 
 
     fun getOutputDecimal() = getOutputBinary().toLong(2)
 
-    override fun toString(): String =
-        wires.values.joinToString("\n") { "$it" } + "\n\n" + gates.joinToString("\n") { "$it" }
+    override fun toString(): String = wires.values.joinToString("\n") { "$it" } + "\n\n" + gates.joinToString("\n") { "$it" }
 }

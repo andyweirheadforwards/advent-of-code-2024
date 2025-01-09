@@ -7,7 +7,7 @@ class Dijkstra<T>(
     private val end: T,
     private val returnAll: Boolean,
     private val findNeighbours: (T) -> List<T>,
-    private val calculateScoreForNeighbour: (T, T) -> Int = { _, _ -> 1 }
+    private val calculateScoreForNeighbour: (T, T) -> Int = { _, _ -> 1 },
 ) {
     private val distances = mutableMapOf<T, Int>().withDefault { Int.MAX_VALUE }
     private val previousNodes = mutableMapOf<T, MutableList<T>>()
@@ -45,7 +45,10 @@ class Dijkstra<T>(
         return paths
     }
 
-    private fun updateNeighbors(current: T, currentDistance: Int) {
+    private fun updateNeighbors(
+        current: T,
+        currentDistance: Int,
+    ) {
         for (neighbor in findNeighbours(current)) {
             val newDistance = currentDistance + calculateScoreForNeighbour(current, neighbor)
             if (newDistance < distances.getValue(neighbor)) {

@@ -15,41 +15,45 @@ typealias MazePath = List<Point>
 
 typealias MazeSolution = Pair<Int, List<MazePath>>
 
-class Maze(private val grid: Grid) {
-  companion object {
-    operator fun invoke(gridString: GridString): Maze = Maze(gridString.grid)
-  }
-
-  val start: MazeNode =
-      MazeNode(
-          grid.findFirst(MAZE_START) ?: throw IllegalArgumentException("Start not found"),
-          Direction.EAST)
-  val finish: Point =
-      grid.findFirst(MAZE_FINISH) ?: throw IllegalArgumentException("Finish not found")
-
-  fun solve(): MazeSolution {
-    val paths = Dijkstra(
-      start,
-      MazeNode(finish, Direction.EAST),
-      true,
-      { it: MazeNode -> getNeighbors(it).toList() },
-      ::calculateScoreForNeighbor
-    ).findPaths()
-    val score = paths.size * MAZE_MOVE_SCORE
-    return Pair(score, paths.map { it.map { node -> node.point } })
-  }
-
-  override fun toString(): String {
-    val (_, paths) = solve()
-    val pathPoints = paths.flatten().toSet()
-    val gridCopy = grid.map { it.copyOf() }
-
-    for (point in pathPoints) {
-      gridCopy[point.y][point.x] = 'O'
+class Maze(
+    private val grid: Grid,
+) {
+    companion object {
+        operator fun invoke(gridString: GridString): Maze = Maze(gridString.grid)
     }
 
-    return gridCopy.string
-  }
+    val start: MazeNode =
+        MazeNode(
+            grid.findFirst(MAZE_START) ?: throw IllegalArgumentException("Start not found"),
+            Direction.EAST,
+        )
+    val finish: Point =
+        grid.findFirst(MAZE_FINISH) ?: throw IllegalArgumentException("Finish not found")
+
+    fun solve(): MazeSolution {
+        val paths =
+            Dijkstra(
+                start,
+                MazeNode(finish, Direction.EAST),
+                true,
+                { it: MazeNode -> getNeighbors(it).toList() },
+                ::calculateScoreForNeighbor,
+            ).findPaths()
+        val score = paths.size * MAZE_MOVE_SCORE
+        return Pair(score, paths.map { it.map { node -> node.point } })
+    }
+
+    override fun toString(): String {
+        val (_, paths) = solve()
+        val pathPoints = paths.flatten().toSet()
+        val gridCopy = grid.map { it.copyOf() }
+
+        for (point in pathPoints) {
+            gridCopy[point.y][point.x] = 'O'
+        }
+
+        return gridCopy.string
+    }
 
 //  private fun dijkstra(): MazeSolution {
 //    val openSet = PriorityQueue<MazeNode>(compareBy { it.score })
@@ -102,34 +106,38 @@ class Maze(private val grid: Grid) {
 //    return Pair(lowestScore, paths)
 //  }
 
-  private fun getNeighbors(node: MazeNode): Sequence<MazeNode> {
-    val point = node.point
-    val direction = node.direction
+    private fun getNeighbors(node: MazeNode): Sequence<MazeNode> {
+        val point = node.point
+        val direction = node.direction
 
-    val forwardPoint = getNextPoint(point, direction)
-    val isForwardBlocked =
-        !grid.isValidPoint(forwardPoint) || grid.getSymbolAt(forwardPoint) == MAZE_WALL
+        val forwardPoint = getNextPoint(point, direction)
+        val isForwardBlocked =
+            !grid.isValidPoint(forwardPoint) || grid.getSymbolAt(forwardPoint) == MAZE_WALL
 
-    return sequence {
-      if (!isForwardBlocked) yield(move(node))
-      yield(turnCcw(node))
-      yield(turnCw(node))
+        return sequence {
+            if (!isForwardBlocked) yield(move(node))
+            yield(turnCcw(node))
+            yield(turnCw(node))
+        }
     }
-  }
 
-  private fun calculateScoreForNeighbor(current: MazeNode, neighbor: MazeNode): Int =
-      when {
-        neighbor.direction == current.direction -> MAZE_MOVE_SCORE
-        else -> MAZE_TURN_SCORE
-      }
+    private fun calculateScoreForNeighbor(
+        current: MazeNode,
+        neighbor: MazeNode,
+    ): Int =
+        when {
+            neighbor.direction == current.direction -> MAZE_MOVE_SCORE
+            else -> MAZE_TURN_SCORE
+        }
 
-  private fun getNextPoint(point: Point, direction: Direction): Point =
-      Point(point).apply { move(direction) }
+    private fun getNextPoint(
+        point: Point,
+        direction: Direction,
+    ): Point = Point(point).apply { move(direction) }
 
-  private fun move(node: MazeNode): MazeNode =
-      MazeNode(getNextPoint(node.point, node.direction), node.direction)
+    private fun move(node: MazeNode): MazeNode = MazeNode(getNextPoint(node.point, node.direction), node.direction)
 
-  private fun turnCcw(node: MazeNode): MazeNode = MazeNode(node.point, node.direction.turnCcw())
+    private fun turnCcw(node: MazeNode): MazeNode = MazeNode(node.point, node.direction.turnCcw())
 
-  private fun turnCw(node: MazeNode): MazeNode = MazeNode(node.point, node.direction.turnCw())
+    private fun turnCw(node: MazeNode): MazeNode = MazeNode(node.point, node.direction.turnCw())
 }
