@@ -1,65 +1,67 @@
-import Day18.Byte
-import Day18.Ram
+import day18.Byte
+import day18.Ram
+import utils.coordinates
+import utils.readInput
 import java.awt.Point
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class Day18Test {
-  @Test
-  fun `It should initialise grid`() {
-    val expected = testGrid
-    val ram = Ram(testInput, 6)
+    @Test
+    fun `It should initialise grid`() {
+        val expected = testGrid
+        val ram = Ram(testInput, 6)
 
-    assertEquals(expected, ram.toString(12))
-  }
+        assertEquals(expected, ram.toString(12))
+    }
 
-  @Test
-  fun `It should solve the test data`() {
-    val ram = Ram(testInput, 6)
-    val (solution) = ram.solve(12)
+    @Test
+    fun `It should solve the test data`() {
+        val ram = Ram(testInput, 6)
+        val (solution) = ram.solve(12)
 
-    assertEquals(22, solution)
-  }
+        assertEquals(22, solution)
+    }
 
-  @Test
-  fun `It should be unsolvable`() {
-    val ram = Ram(testInput, 6)
-    val (solution) = ram.solve()
+    @Test
+    fun `It should be unsolvable`() {
+        val ram = Ram(testInput, 6)
+        val (solution) = ram.solve()
 
-    assertEquals(Int.MAX_VALUE, solution)
-  }
+        assertEquals(Int.MAX_VALUE, solution)
+    }
 
-  @Test
-  fun `It should get last byte`() {
-    val ram = Ram(testInput, 6)
-    val byte: Byte = ram.solveLastByte()
+    @Test
+    fun `It should get last byte`() {
+        val ram = Ram(testInput, 6)
+        val byte: Byte = ram.solveLastByte()
 
-    assertEquals(Point(6, 1).toString(), byte.toString())
-  }
+        assertEquals(Point(6, 1).toString(), byte.toString())
+    }
 
-  @Test
-  fun `It should solve part one`() {
-    val input = readInput("Day18")
+    @Test
+    fun `It should solve part one`() {
+        val input = readInput("day18")
 
-    val ram = Ram(input)
-    val (steps) = ram.solve(1024)
+        val ram = Ram(input)
+        val (steps) = ram.solve(1024)
 
-    assertEquals(374, steps)
-  }
+        assertEquals(374, steps)
+    }
 
-  @Test
-  fun `It should solve part two`() {
-    val input = readInput("Day18")
+    @Test
+    fun `It should solve part two`() {
+        val input = readInput("day18")
 
-    val ram = Ram(input)
-    val byte = ram.solveLastByte()
+        val ram = Ram(input)
+        val byte = ram.solveLastByte()
 
-    assertEquals("30,12", byte.coordinates)
-  }
+        assertEquals("30,12", byte.coordinates)
+    }
 
-  companion object {
-    val testInput =
-        """
+    companion object {
+        val testInput =
+            """
             5,4
             4,2
             4,5
@@ -85,11 +87,10 @@ class Day18Test {
             0,5
             1,6
             2,0
-        """
-            .trimIndent()
+            """.trimIndent()
 
-    val testGrid =
-        """
+        val testGrid =
+            """
             ...#...
             ..#..#.
             ....#..
@@ -97,7 +98,6 @@ class Day18Test {
             ..#..#.
             .#..#..
             #.#....
-        """
-            .trimIndent()
-  }
+            """.trimIndent()
+    }
 }

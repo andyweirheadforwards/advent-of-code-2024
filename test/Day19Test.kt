@@ -1,12 +1,16 @@
-import Day19.*
+import day19.Design
+import day19.canReconstruct
+import day19.canReconstructWays
+import day19.designs
+import day19.towels
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
+import utils.readInput
 import kotlin.test.Test
 
 class Day19Test {
-
     @Test
     fun `It should get a list of towels`() {
         val expected = setOf("r", "wr", "b", "g", "bwu", "rb", "gb", "br")
@@ -35,7 +39,10 @@ class Day19Test {
 
     @ParameterizedTest(name = "Design {0} can be reconstructed: {1}")
     @MethodSource("getDesigns")
-    fun `It should determine if a design can be reconstructed`(design: Design, expected: Boolean) {
+    fun `It should determine if a design can be reconstructed`(
+        design: Design,
+        expected: Boolean,
+    ) {
         val result = design.canReconstruct(testInput.towels)
 
         assertEquals(expected, result)
@@ -43,7 +50,7 @@ class Day19Test {
 
     @Test
     fun `It should have correct count of designs`() {
-        val input = readInput("Day19")
+        val input = readInput("aoc/day19")
 
         val towels = input.towels
         val designs = input.designs
@@ -58,7 +65,7 @@ class Day19Test {
     fun `It should determine the number of ways a design can be reconstructed`(
         design: Design,
         canReconstruct: Boolean,
-        expected: Long
+        expected: Long,
     ) {
         val result = design.canReconstructWays(testInput.towels)
 
@@ -89,8 +96,7 @@ class Day19Test {
             bwurrg
             brgr
             bbrgwb
-        """
-                .trimIndent()
+            """.trimIndent()
 
         @JvmStatic
         fun getDesigns() =
@@ -103,7 +109,6 @@ class Day19Test {
                 Arguments.of("bwurrg", true, 1L),
                 Arguments.of("brgr", true, 2L),
                 Arguments.of("bbrgwb", false, 0L),
-            )
-                .iterator()
+            ).iterator()
     }
 }

@@ -1,11 +1,13 @@
-import Day23.LanParty
+import day23.LanParty
+import utils.readInput
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class Day23Test {
     @Test
     fun `It should find networks of three computers`() {
-        val expected = """
+        val expected =
+            """
             co,de,ta
             co,ka,ta
             de,ka,ta
@@ -13,7 +15,7 @@ class Day23Test {
             tb,vc,wq
             tc,td,wh
             td,wh,yn
-        """.trimIndent()
+            """.trimIndent()
 
         val lanParty = LanParty(testInput)
 
@@ -23,7 +25,7 @@ class Day23Test {
     @Test
     fun `It should solve part one`() {
         val expected = 1173
-        val input = readInput("Day23")
+        val input = readInput("aoc/day23")
         val lanParty = LanParty(input)
 
         assertEquals(expected, lanParty.solvePartOne())
@@ -50,7 +52,7 @@ class Day23Test {
     @Test
     fun `It should solve part two`() {
         val expected = "cm,de,ez,gv,hg,iy,or,pw,qu,rs,sn,uc,wq"
-        val input = readInput("Day23")
+        val input = readInput("aoc/day23")
         val lanParty = LanParty(input)
         val solution = lanParty.solvePartTwo()
 
@@ -58,7 +60,8 @@ class Day23Test {
     }
 
     companion object {
-        val testInput = """
+        val testInput =
+            """
             kh-tc
             qp-kh
             de-cg
@@ -91,6 +94,6 @@ class Day23Test {
             wh-qp
             tb-vc
             td-yn
-        """.trimIndent()
+            """.trimIndent()
     }
 }

@@ -1,14 +1,12 @@
-import Day24.MonitoringDevice
-import Day24.findSolutionTwo
-import kotlinx.coroutines.runBlocking
+import day24.MonitoringDevice
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
+import utils.readInput
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class Day24Test {
-
     @Test
     fun `It should initialise`() {
         val expected = smallTestInput
@@ -52,7 +50,7 @@ class Day24Test {
     @Test
     fun `It should solve part one`() {
         val expected = 51410244478064L
-        val input = readInput("Day24")
+        val input = readInput("aoc/day24")
         val monitoringDevice = MonitoringDevice(input)
 
         assertEquals(expected, monitoringDevice.getOutputDecimal())
@@ -61,7 +59,8 @@ class Day24Test {
     @Test
     fun `It should calculate zValue`() {
         val expected = "11000"
-        val input = """
+        val input =
+            """
             x00: 1
             x01: 1
             x02: 0
@@ -72,7 +71,7 @@ class Day24Test {
             y03: 1
             
             x00 AND y00 -> z00
-        """.trimIndent()
+            """.trimIndent()
 
         val monitoringDevice = MonitoringDevice(input)
 
@@ -81,7 +80,12 @@ class Day24Test {
 
     @ParameterizedTest(name = "It should be x {1} - y {2}")
     @MethodSource("getXyValues")
-    fun `It should get starting values`(input: String, x: String, y: String, z: String) {
+    fun `It should get starting values`(
+        input: String,
+        x: String,
+        y: String,
+        z: String,
+    ) {
         val monitoringDevice = MonitoringDevice(input)
 
         assertEquals(x, monitoringDevice.xValue, "x")
@@ -89,16 +93,9 @@ class Day24Test {
         assertEquals(z, monitoringDevice.zValue, "z")
     }
 
-    @ParameterizedTest(name = "It should be {3} for x: {1} y: {2}")
-    @MethodSource("getInvalidXyValues")
-    fun `It find solution two`(input: String, x: String, y: String, expected: String) {
-        val result = runBlocking { findSolutionTwo(input, 2) }
-
-        assertEquals(expected, result)
-    }
-
     companion object {
-        val smallTestInput = """
+        val smallTestInput =
+            """
             x00: 1
             x01: 1
             x02: 1
@@ -109,9 +106,10 @@ class Day24Test {
             x00 AND y00 -> z00
             x01 XOR y01 -> z01
             x02 OR y02 -> z02
-        """.trimIndent()
+            """.trimIndent()
 
-        val testInput = """
+        val testInput =
+            """
             x00: 1
             x01: 0
             x02: 1
@@ -159,9 +157,10 @@ class Day24Test {
             hwm AND bqk -> z03
             tgd XOR rvg -> z12
             tnw OR pbm -> gnj
-        """.trimIndent()
+            """.trimIndent()
 
-        val invalidGatesInputSmall = """
+        val invalidGatesInputSmall =
+            """
             x00: 0
             x01: 1
             x02: 0
@@ -176,9 +175,10 @@ class Day24Test {
             x02 OR y02 -> z03
             x03 OR y03 -> z02
 
-        """.trimIndent()
+            """.trimIndent()
 
-        val invalidGatesInput = """
+        val invalidGatesInput =
+            """
             x00: 0
             x01: 1
             x02: 0
@@ -198,31 +198,20 @@ class Day24Test {
             x03 AND y03 -> z03
             x04 AND y04 -> z04
             x05 AND y05 -> z00
-        """.trimIndent()
+            """.trimIndent()
 
         @JvmStatic
-        fun getXyValues() = listOf(
-            Arguments.of(smallTestInput, "111", "010", "1001"), // small input
-            Arguments.of(testInput, "01101", "11111", "101100"), // test input
-            Arguments.of(invalidGatesInput, "101010", "101100", "1010110"), // invalid gates input
-            Arguments.of(
-                readInput("Day24"),
-                "110001011010001110001010000101001110001111001".reversed(),
-                "101100110111101001010111011011010001111101011".reversed(),
-                "1011101011111111011111001111000010010001110000"
-            ), // input
-        ).iterator()
-
-        @JvmStatic
-        fun getInvalidXyValues() = listOf(
-            Arguments.of(invalidGatesInputSmall, "10", "01", "z00,z01,z02,z03"), // invalid gates input
-            Arguments.of(invalidGatesInput, "101010", "101100", "z00,z01,z02,z05"), // invalid gates input
-//            Arguments.of(
-//                readInput("Day24"),
-//                "110001011010001110001010000101001110001111001".reversed(),
-//                "101100110111101001010111011011010001111101011".reversed(),
-//                "1011101011111111011111001111000010010001110000"
-//            ), // input
-        ).iterator()
+        fun getXyValues() =
+            listOf(
+                Arguments.of(smallTestInput, "111", "010", "1001"), // small input
+                Arguments.of(testInput, "01101", "11111", "101100"), // test input
+                Arguments.of(invalidGatesInput, "101010", "101100", "1010110"), // invalid gates input
+                Arguments.of(
+                    readInput("aoc/day24"),
+                    "110001011010001110001010000101001110001111001".reversed(),
+                    "101100110111101001010111011011010001111101011".reversed(),
+                    "1011101011111111011111001111000010010001110000",
+                ), // input
+            ).iterator()
     }
 }

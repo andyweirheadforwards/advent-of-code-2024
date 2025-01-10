@@ -1,65 +1,77 @@
+import utils.Grid
+import utils.PROFILE_REPEAT
+import utils.getNeighbours
+import utils.getSymbolAt
+import utils.grid
+import utils.readInput
 import java.awt.Point
 import kotlin.time.measureTime
 
 fun main() {
-  measureTime {
+    measureTime {
         repeat(PROFILE_REPEAT) {
-          val input = readInput("Day10")
+            val input = readInput("Day10")
 
-          val totalTrailScore = input.grid.totalTrailScore
-          println(
-              "What is the sum of the scores of all trailheads on your topographic map? $totalTrailScore")
+            val totalTrailScore = input.grid.totalTrailScore
+            println(
+                "What is the sum of the scores of all trailheads on your topographic map? $totalTrailScore",
+            )
 
-          val totalTrailRating = input.grid.totalTrailRating
-          println(
-              "What is the sum of the ratings of all trailheads?                        $totalTrailRating")
+            val totalTrailRating = input.grid.totalTrailRating
+            println(
+                "What is the sum of the ratings of all trailheads?                        $totalTrailRating",
+            )
         }
-      }
-      .let { println("\nAverage time taken: ${it / PROFILE_REPEAT}") }
+    }.let { println("\nAverage time taken: ${it / PROFILE_REPEAT}") }
 }
 
 typealias TrailMap = Grid
 
 val Grid.lastIndexX: Int
-  get() = first().lastIndex
+    get() = first().lastIndex
 val Grid.lastIndexY: Int
-  get() = lastIndex
+    get() = lastIndex
 
-data class TrailPosition(val point: Point, val height: Int)
+data class TrailPosition(
+    val point: Point,
+    val height: Int,
+)
 
-fun TrailMap.findTrailHeads(): List<Point> = flatMapIndexed { y, row ->
-  row.mapIndexed { x, height -> if (height == '0') Point(x, y) else null }.filterNotNull()
-}
+fun TrailMap.findTrailHeads(): List<Point> =
+    flatMapIndexed { y, row ->
+        row.mapIndexed { x, height -> if (height == '0') Point(x, y) else null }.filterNotNull()
+    }
 
 fun TrailMap.getNextTrailPoints(position: TrailPosition): List<Point> =
     getNeighbours(position.point).filter {
-      val nextHeight = "${position.height + 1}".toCharArray().first()
-      getSymbolAt(it) == nextHeight
+        val nextHeight = "${position.height + 1}".toCharArray().first()
+        getSymbolAt(it) == nextHeight
     }
 
 fun TrailMap.calculateTrailScore(trailHead: Point): Int {
+    val trails = walkTrail(TrailPosition(trailHead, 0)).toSet()
 
-  val trails = walkTrail(TrailPosition(trailHead, 0)).toSet()
-
-  return trails.count { getSymbolAt(it) == '9' }
+    return trails.count { getSymbolAt(it) == '9' }
 }
 
 fun TrailMap.calculateTrailRating(trailHead: Point): Int {
-  val trails = walkTrail(TrailPosition(trailHead, 0))
+    val trails = walkTrail(TrailPosition(trailHead, 0))
 
-  return trails.count { getSymbolAt(it) == '9' }
+    return trails.count { getSymbolAt(it) == '9' }
 }
 
 fun TrailMap.walkTrail(position: TrailPosition): List<Point> {
-  val nextTrailPoints = getNextTrailPoints(position)
+    val nextTrailPoints = getNextTrailPoints(position)
 
-  return if (position.height < 9)
-      nextTrailPoints.flatMap { walkTrail(TrailPosition(it, position.height + 1)) }
-  else listOf(position.point)
+    return if (position.height < 9) {
+        nextTrailPoints.flatMap { walkTrail(TrailPosition(it, position.height + 1)) }
+    } else {
+        listOf(position.point)
+    }
 }
 
 val TrailMap.totalTrailScore: Int
-  get() = findTrailHeads().sumOf(::calculateTrailScore)
+    get() = findTrailHeads().sumOf(::calculateTrailScore)
 
 val TrailMap.totalTrailRating: Int
-  get() = findTrailHeads().sumOf(::calculateTrailRating)
+    get() = findTrailHeads().sumOf(::calculateTrailRating)

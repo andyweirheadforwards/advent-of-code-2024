@@ -1,21 +1,33 @@
+import utils.Grid
+import utils.GridString
+import utils.PROFILE_REPEAT
+import utils.diff
+import utils.getSymbolAt
+import utils.grid
+import utils.isValidPoint
+import utils.plus
+import utils.readInput
+import utils.setSymbolAt
+import utils.string
 import java.awt.Point
 import kotlin.time.measureTime
 
 fun main() {
-  measureTime {
+    measureTime {
         repeat(PROFILE_REPEAT) {
-          val input = readInput("Day08")
+            val input = readInput("Day08")
 
-          val countOne = AntennaMap(input).antinodesOne.size
-          println(
-              "How many unique locations within the bounds of the map contain an antinode? $countOne")
+            val countOne = AntennaMap(input).antinodesOne.size
+            println(
+                "How many unique locations within the bounds of the map contain an antinode? $countOne",
+            )
 
-          val countTwo = AntennaMap(input).antinodesTwo.size
-          println(
-              "How many unique locations within the bounds of the map contain an antinode? $countTwo")
+            val countTwo = AntennaMap(input).antinodesTwo.size
+            println(
+                "How many unique locations within the bounds of the map contain an antinode? $countTwo",
+            )
         }
-      }
-      .let { println("\nAverage time taken: ${it / PROFILE_REPEAT}") }
+    }.let { println("\nAverage time taken: ${it / PROFILE_REPEAT}") }
 }
 
 typealias Freq = Char
@@ -24,57 +36,65 @@ typealias Frequencies = CharArray
 
 typealias AntennaLocations = Map<Freq, List<Point>>
 
-class AntennaMap(val grid: Grid) {
+class AntennaMap(
+    val grid: Grid,
+) {
+    companion object {
+        operator fun invoke(string: GridString) = AntennaMap(string.grid)
 
-  companion object {
-    operator fun invoke(string: GridString) = AntennaMap(string.grid)
+        val frequencyRegex = "(\\w)".toRegex()
+    }
 
-    val frequencyRegex = "(\\w)".toRegex()
-  }
+    val frequencies: Frequencies by lazy {
+        frequencyRegex
+            .findAll(grid.string)
+            .map { it.value.first() }
+            .toSet()
+            .toCharArray()
+    }
 
-  val frequencies: Frequencies by lazy {
-    frequencyRegex.findAll(grid.string).map { it.value.first() }.toSet().toCharArray()
-  }
+    val antennaLocations: AntennaLocations by lazy {
+        frequencies.associateWith { freq ->
+            grid
+                .mapIndexed { y, line ->
+                    line.joinToString("").mapIndexedNotNull { x, symbol ->
+                        if (symbol == freq) Point(x, y) else null
+                    }
+                }.flatten()
+        }
+    }
 
-  val antennaLocations: AntennaLocations by lazy {
-    frequencies.associateWith { freq ->
-      grid
-          .mapIndexed { y, line ->
-            line.joinToString("").mapIndexedNotNull { x, symbol ->
-              if (symbol == freq) Point(x, y) else null
+    val antinodesOne: Set<Point>
+        get() =
+            computeAntinodes { one, two ->
+                val diff = two.diff(one)
+                listOf(one + diff)
             }
-          }
-          .flatten()
-    }
-  }
 
-  val antinodesOne: Set<Point>
-    get() = computeAntinodes { one, two ->
-      val diff = two.diff(one)
-      listOf(one + diff)
-    }
-
-  val antinodesTwo: Set<Point>
-    get() = computeAntinodes { location, other ->
-      val diff = other.diff(location)
-      generateSequence(location) { p -> p + diff } // Expansion logic
-          .takeWhile(grid::isValidPoint)
-          .toList()
-    }
-
-  fun symbolAt(point: Point): Char = grid.getSymbolAt(point)
-
-  fun setSymbolAtPoint(point: Point, symbol: Char) = grid.setSymbolAt(point, symbol)
-
-  override fun toString(): String = grid.string
-
-  private fun computeAntinodes(compute: (Point, Point) -> List<Point>): Set<Point> =
-      antennaLocations.values
-          .flatMap { locations ->
-            locations.flatMap { location ->
-              locations.filterNot { location == it }.flatMap { compute(location, it) }
+    val antinodesTwo: Set<Point>
+        get() =
+            computeAntinodes { location, other ->
+                val diff = other.diff(location)
+                generateSequence(location) { p -> p + diff } // Expansion logic
+                    .takeWhile(grid::isValidPoint)
+                    .toList()
             }
-          }
-          .filter(grid::isValidPoint)
-          .toSet()
+
+    fun symbolAt(point: Point): Char = grid.getSymbolAt(point)
+
+    fun setSymbolAtPoint(
+        point: Point,
+        symbol: Char,
+    ) = grid.setSymbolAt(point, symbol)
+
+    override fun toString(): String = grid.string
+
+    private fun computeAntinodes(compute: (Point, Point) -> List<Point>): Set<Point> =
+        antennaLocations.values
+            .flatMap { locations ->
+                locations.flatMap { location ->
+                    locations.filterNot { location == it }.flatMap { compute(location, it) }
+                }
+            }.filter(grid::isValidPoint)
+            .toSet()
 }

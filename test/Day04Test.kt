@@ -1,182 +1,172 @@
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
+import utils.GridString
+import utils.OrdinalDirection
 
 class Day04Test {
+    @ParameterizedTest(name = "It should find {2} instances of WORD facing {1}")
+    @MethodSource("getSmallGridString")
+    fun `It should find WORD in small grid`(
+        grid: GridString,
+        direction: OrdinalDirection,
+        expected: Int,
+    ) {
+        assertEquals(expected, grid.searchForWord(WORD, direction))
+    }
 
-  @ParameterizedTest(name = "It should find {2} instances of WORD facing {1}")
-  @MethodSource("getSmallGridString")
-  fun `It should find WORD in small grid`(
-      grid: GridString,
-      direction: OrdinalDirection,
-      expected: Int
-  ) {
-    assertEquals(expected, grid.searchForWord(WORD, direction))
-  }
+    @Test
+    fun `It should find all instances of WORD in small grid`() {
+        val grid = smallGridString
+        assertEquals(4, grid.searchForWord(WORD))
+    }
 
-  @Test
-  fun `It should find all instances of WORD in small grid`() {
-    val grid = smallGridString
-    assertEquals(4, grid.searchForWord(WORD))
-  }
+    @ParameterizedTest(name = "It should find {2} instances of WORD facing {1}")
+    @MethodSource("getLargeGridString")
+    fun `It should find WORD in large grid`(
+        grid: GridString,
+        direction: OrdinalDirection,
+        expected: Int,
+    ) {
+        assertEquals(expected, grid.searchForWord(WORD, direction))
+    }
 
-  @ParameterizedTest(name = "It should find {2} instances of WORD facing {1}")
-  @MethodSource("getLargeGridString")
-  fun `It should find WORD in large grid`(
-      grid: GridString,
-      direction: OrdinalDirection,
-      expected: Int
-  ) {
-    assertEquals(expected, grid.searchForWord(WORD, direction))
-  }
+    @Test
+    fun `It should find all instances of WORD in large grid`() {
+        val grid = largeGridString
+        assertEquals(18, grid.searchForWord(WORD))
+    }
 
-  @Test
-  fun `It should find all instances of WORD in large grid`() {
-    val grid = largeGridString
-    assertEquals(18, grid.searchForWord(WORD))
-  }
-
-  @Test
-  fun `It should reverse grid lines horizontally`() {
-    val grid =
-        """
+    @Test
+    fun `It should reverse grid lines horizontally`() {
+        val grid =
+            """
             AB
             DC
-        """
-            .trimIndent()
+            """.trimIndent()
 
-    val expected =
-        """
+        val expected =
+            """
             BA
             CD
-        """
-            .trimIndent()
+            """.trimIndent()
 
-    assertEquals(expected, grid.reverseHorizontal())
-  }
+        assertEquals(expected, grid.reverseHorizontal())
+    }
 
-  @Test
-  fun `It should reverse grid lines vertically`() {
-    val grid =
-        """
+    @Test
+    fun `It should reverse grid lines vertically`() {
+        val grid =
+            """
             AB
             DC
-        """
-            .trimIndent()
+            """.trimIndent()
 
-    val expected =
-        """
+        val expected =
+            """
             DC
             AB
-        """
-            .trimIndent()
+            """.trimIndent()
 
-    assertEquals(expected, grid.reverseVertical())
-  }
+        assertEquals(expected, grid.reverseVertical())
+    }
 
-  @Test
-  fun `It should rotate grid CW`() {
-    val grid =
-        """
+    @Test
+    fun `It should rotate grid CW`() {
+        val grid =
+            """
             ABC
             FED
-        """
-            .trimIndent()
-    val expected =
-        """
+            """.trimIndent()
+        val expected =
+            """
             FA
             EB
             DC
-        """
-            .trimIndent()
+            """.trimIndent()
 
-    assertEquals(expected, grid.rotatedCW())
-  }
+        assertEquals(expected, grid.rotatedCW())
+    }
 
-  @Test
-  fun `It should rotate grid CCW`() {
-    val grid =
-        """
+    @Test
+    fun `It should rotate grid CCW`() {
+        val grid =
+            """
             FA
             EB
             DC
-        """
-            .trimIndent()
-    val expected =
-        """
+            """.trimIndent()
+        val expected =
+            """
             ABC
             FED
-        """
-            .trimIndent()
+            """.trimIndent()
 
-    assertEquals(expected, grid.rotatedCCW())
-  }
+        assertEquals(expected, grid.rotatedCCW())
+    }
 
-  @Test
-  fun `It should slope grid to the right`() {
-    val grid =
-        """
+    @Test
+    fun `It should slope grid to the right`() {
+        val grid =
+            """
             ABC
             DEF
             GHI
-        """
-            .trimIndent()
-    val expected =
-        """
+            """.trimIndent()
+        val expected =
+            """
             ABC..
             .DEF.
             ..GHI
-        """
-            .trimIndent()
+            """.trimIndent()
 
-    assertEquals(expected, grid.slopeRight())
-  }
+        assertEquals(expected, grid.slopeRight())
+    }
 
-  @Test
-  fun `It should slope grid to the left`() {
-    val grid =
-        """
+    @Test
+    fun `It should slope grid to the left`() {
+        val grid =
+            """
             ABC
             DEF
             GHI
-"""
-            .trimIndent()
-    val expected =
-        """
+            """.trimIndent()
+        val expected =
+            """
             ..ABC
             .DEF.
             GHI..
-"""
-            .trimIndent()
+            """.trimIndent()
 
-    assertEquals(expected, grid.slopeLeft())
-  }
+        assertEquals(expected, grid.slopeLeft())
+    }
 
-  @ParameterizedTest(name = "{0} rotated {1} times should match X_MAS")
-  @MethodSource("getXMas")
-  fun `It should match X_MAS rotated`(grid: GridString, rotated: Int) {
-    assertTrue(grid.matchesXMas())
-  }
+    @ParameterizedTest(name = "{0} rotated {1} times should match X_MAS")
+    @MethodSource("getXMas")
+    fun `It should match X_MAS rotated`(grid: GridString) {
+        assertTrue(grid.matchesXMas())
+    }
 
-  @Test
-  fun `It should not match invalid X_MAS`() {
-    val invalidGridString: GridString =
-        """
+    @Test
+    fun `It should not match invalid X_MAS`() {
+        val invalidGridString: GridString =
+            """
             M S
              X 
             M S
-        """
-            .trimIndent()
+            """.trimIndent()
 
-    assertFalse(invalidGridString.matchesXMas())
-  }
+        assertFalse(invalidGridString.matchesXMas())
+    }
 
-  @Test
-  fun `It should find all instances of X_MAS in grid`() {
-    val grid: GridString =
-        """
+    @Test
+    fun `It should find all instances of X_MAS in grid`() {
+        val grid: GridString =
+            """
             .M.S......
             ..A..MSMS.
             .M.S.MAA..
@@ -187,29 +177,27 @@ class Day04Test {
             .A.A.A.A..
             M.M.M.M.M.
             ..........
-        """
-            .trimIndent()
-    val expected = 9
+            """.trimIndent()
+        val expected = 9
 
-    val number = grid.searchForXMas()
+        val number = grid.searchForXMas()
 
-    assertEquals(expected, number)
-  }
+        assertEquals(expected, number)
+    }
 
-  companion object {
-    private val smallGridString =
-        """
+    companion object {
+        private val smallGridString =
+            """
             ..X...
             .SAMX.
             .A..A.
             XMAS.S
             .X....
-        """
-            .trimIndent()
+            """.trimIndent()
 
-    @JvmStatic
-    fun getSmallGridString() =
-        listOf(
+        @JvmStatic
+        fun getSmallGridString() =
+            listOf(
                 Arguments.of(smallGridString, OrdinalDirection.NORTH, 1),
                 Arguments.of(smallGridString, OrdinalDirection.NORTHEAST, 0),
                 Arguments.of(smallGridString, OrdinalDirection.EAST, 1),
@@ -218,11 +206,10 @@ class Day04Test {
                 Arguments.of(smallGridString, OrdinalDirection.SOUTHWEST, 0),
                 Arguments.of(smallGridString, OrdinalDirection.WEST, 1),
                 Arguments.of(smallGridString, OrdinalDirection.NORTHWEST, 0),
-            )
-            .asIterable()
+            ).asIterable()
 
-    private val largeGridString =
-        """
+        private val largeGridString =
+            """
             MMMSXXMASM
             MSAMXMSMSA
             AMXSXMAAMM
@@ -233,12 +220,11 @@ class Day04Test {
             SAXAMASAAA
             MAMMMXMMMM
             MXMXAXMASX
-        """
-            .trimIndent()
+            """.trimIndent()
 
-    @JvmStatic
-    fun getLargeGridString() =
-        listOf(
+        @JvmStatic
+        fun getLargeGridString() =
+            listOf(
                 Arguments.of(largeGridString, OrdinalDirection.NORTH, 2),
                 Arguments.of(largeGridString, OrdinalDirection.NORTHEAST, 4),
                 Arguments.of(largeGridString, OrdinalDirection.EAST, 3),
@@ -247,17 +233,15 @@ class Day04Test {
                 Arguments.of(largeGridString, OrdinalDirection.SOUTHWEST, 1),
                 Arguments.of(largeGridString, OrdinalDirection.WEST, 2),
                 Arguments.of(largeGridString, OrdinalDirection.NORTHWEST, 4),
-            )
-            .asIterable()
+            ).asIterable()
 
-    @JvmStatic
-    fun getXMas() =
-        (0..3)
-            .map { rotated ->
-              var xmas = X_MAS.replace(" ", "Z")
-              repeat(rotated) { xmas = xmas.rotatedCW() }
-              Arguments.of(xmas, rotated)
-            }
-            .asIterable()
-  }
+        @JvmStatic
+        fun getXMas() =
+            (0..3)
+                .map { rotated ->
+                    var xmas = X_MAS.replace(" ", "Z")
+                    repeat(rotated) { xmas = xmas.rotatedCW() }
+                    Arguments.of(xmas, rotated)
+                }.asIterable()
+    }
 }
