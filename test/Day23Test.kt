@@ -25,7 +25,7 @@ class Day23Test {
     @Test
     fun `It should solve part one`() {
         val expected = 1173
-        val input = readInput("Day23")
+        val input = readInput("aoc/day23")
         val lanParty = LanParty(input)
 
         assertEquals(expected, lanParty.solvePartOne())
@@ -52,7 +52,7 @@ class Day23Test {
     @Test
     fun `It should solve part two`() {
         val expected = "cm,de,ez,gv,hg,iy,or,pw,qu,rs,sn,uc,wq"
-        val input = readInput("Day23")
+        val input = readInput("aoc/day23")
         val lanParty = LanParty(input)
         val solution = lanParty.solvePartTwo()
 

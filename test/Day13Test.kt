@@ -188,7 +188,7 @@ class Day13Test {
     @Test
     fun `It should solve part one`() {
         val expected = 27157L
-        val input = readInput("Day13").costOfAllPrizesOne()
+        val input = readInput("aoc/day13").costOfAllPrizesOne()
 
         assertEquals(expected, input)
     }
@@ -196,7 +196,7 @@ class Day13Test {
     @Test
     fun `It should solve part two`() {
         val expected = 104015411578548L
-        val input = readInput("Day13").costOfAllPrizesTwo()
+        val input = readInput("aoc/day13").costOfAllPrizesTwo()
 
         assertEquals(expected, input)
     }

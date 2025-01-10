@@ -35,15 +35,6 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: ./gradlew build sonar --info
 
-  detekt:
-    runs-on: ubuntu-latest
-    steps:
-      - name: "checkout"
-        uses: actions/checkout@v2
-
-      - name: "detekt"
-        uses: natiginfo/action-detekt-all@1.23.7
-
   ktlint:
     name: Check Code Quality
     runs-on: ubuntu-latest

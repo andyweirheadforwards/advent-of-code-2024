@@ -1,3 +1,6 @@
+val kotlinxVersion = "1.9.0"
+val caffeineVersion = "3.0.5"
+
 plugins {
     kotlin("jvm") version "2.1.0"
     id("io.gitlab.arturbosch.detekt").version("1.23.7")
@@ -12,8 +15,6 @@ repositories {
     mavenCentral()
 }
 
-val kotlinxVersion = "1.9.0"
-val caffeineVersion = "3.0.5"
 dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxVersion")
     implementation("com.github.ben-manes.caffeine:caffeine:$caffeineVersion")
@@ -106,6 +107,7 @@ sonar {
         property("sonar.language", "kotlin")
         property("sonar.sources", "src")
         property("sonar.tests", "test")
+        property("sonar.kotlin.detekt.reportPaths", "build/reports/detekt")
         property("sonar.qualitygate.wait", "true")
     }
 }

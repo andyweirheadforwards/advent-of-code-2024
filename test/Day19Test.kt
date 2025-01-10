@@ -50,7 +50,7 @@ class Day19Test {
 
     @Test
     fun `It should have correct count of designs`() {
-        val input = readInput("Day19")
+        val input = readInput("aoc/day19")
 
         val towels = input.towels
         val designs = input.designs
